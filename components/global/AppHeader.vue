@@ -47,8 +47,16 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+.leftSide {
+  display: flex;
+  align-items: center;
+}
 .siteLogo {
   width: 210px;
+}
+
+.rightSide {
+  display: flex;
 }
 .settingsBtn {
   height: 40px;
@@ -58,10 +66,14 @@ export default {
   border: none;
   cursor: pointer;
   transition: 0.2s;
-  margin-left: 5px;
+  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .settingsBtn .fas {
   color: var(--title-text);
+  font-size: 16px;
 }
 .settingsBtn:hover {
   background-color: var(--background-1-hover);
@@ -74,6 +86,6 @@ export default {
 /* Media Queries */
 @media only screen and (max-width: 1024px) {
   .headerCon {left: 0;}
-  .navToggleBtn {display: inline;}
+  .navToggleBtn {display: flex;}
 }
 </style>

@@ -77,6 +77,9 @@ export default {
     border-radius: 50%;
     cursor: pointer;
     transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .switchAccountBtn .fas {
     color: var(--accent-1);

@@ -8,10 +8,10 @@
                         <UserInfoSection/>
                         <!-- Navigation -->
                         <nav class="navLinksCon">
-                            <nuxt-link class="navLink" to="/dashboard"><div class="iconCon"><fa class="fas" :icon="['fa', 'tachometer-alt']"/></div>Dashbaord</nuxt-link>
-                            <nuxt-link class="navLink" to="/playlist/shuffle"><div class="iconCon"><fa class="fas" :icon="['fa', 'random']"/></div>Shuffle Playlist</nuxt-link>
-                            <nuxt-link class="navLink" to="/playlist/generate"><div class="iconCon"><fa class="fas" :icon="['fa', 'redo']"/></div>Generate Playlists</nuxt-link>
-                            <nuxt-link class="navLink" to="/playlist/duplicates"><div class="iconCon"><fa class="fas" :icon="['fa', 'clone']"/></div>Remove Duplicates</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard"><div class="iconCon"><fa class="fas" :icon="['fa', 'tachometer-alt']"/></div>Dashbaord</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/playlist/shuffle"><div class="iconCon"><fa class="fas" :icon="['fa', 'random']"/></div>Shuffle Playlist</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/playlist/generate"><div class="iconCon"><fa class="fas" :icon="['fa', 'redo']"/></div>Generate Playlists</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/playlist/duplicates"><div class="iconCon"><fa class="fas" :icon="['fa', 'clone']"/></div>Remove Duplicates</nuxt-link>
                         </nav>
                     </div>
     
@@ -152,17 +152,13 @@ export default {
     transition: 0.2s;
     pointer-events: none;
 }
-@keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-}
 
 /* Media Queries */
 @media only screen and (max-width: 1024px) {
     .navCon {left: -350px;}
     .navCon.navActive {left: 0;}
     .siteOverlay {display: flex; opacity: 0;}
-    .siteOverlay.navActive {display: flex; opacity: 1; pointer-events: all; animation: fadeIn 0.2s;}
+    .siteOverlay.navActive {display: flex; opacity: 1; pointer-events: all;}
 }
 @media only screen and (max-width: 400px) {
     .navCon {width: calc(100% - 40px);}
