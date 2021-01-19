@@ -1,26 +1,30 @@
 <template>
-    <div class="navCon">
-        <Simplebar class="navWrapper" data-simplebar-auto-hide="true">
-         
-                <div class="navTopSide">
-                    <!-- User Info Section -->
-                    <UserInfoSection/>
-                    <!-- Navigation -->
-                    <nav class="navLinksCon">
-                        <nuxt-link class="navLink" to="/dashboard"><div class="iconCon"><fa class="fas" :icon="['fa', 'tachometer-alt']"/></div>Dashbaord</nuxt-link>
-                        <nuxt-link class="navLink" to="/playlist/shuffle"><div class="iconCon"><fa class="fas" :icon="['fa', 'random']"/></div>Shuffle Playlist</nuxt-link>
-                        <nuxt-link class="navLink" to="/playlist/generate"><div class="iconCon"><fa class="fas" :icon="['fa', 'redo']"/></div>Generate Playlists</nuxt-link>
-                        <nuxt-link class="navLink" to="/playlist/duplicates"><div class="iconCon"><fa class="fas" :icon="['fa', 'clone']"/></div>Remove Duplicates</nuxt-link>
-                    </nav>
-                </div>
- 
-                <!-- Footer --> 
-                <div class="navFootCon">
-                    <p class="powererdByP">Powered By Melody Melon</p>
-                    <p><nuxt-link to="/terms-service">Terms Service</nuxt-link> & <nuxt-link to="/privacy-policy">Privacy Policy</nuxt-link></p>
-                </div>
-       
-        </Simplebar>
+    <div>
+        <div class="navCon" :class="{ navActive : navStatus }">
+            <Simplebar class="navWrapper" data-simplebar-auto-hide="true">
+            
+                    <div class="navTopSide">
+                        <!-- User Info Section -->
+                        <UserInfoSection/>
+                        <!-- Navigation -->
+                        <nav class="navLinksCon">
+                            <nuxt-link class="navLink" to="/dashboard"><div class="iconCon"><fa class="fas" :icon="['fa', 'tachometer-alt']"/></div>Dashbaord</nuxt-link>
+                            <nuxt-link class="navLink" to="/playlist/shuffle"><div class="iconCon"><fa class="fas" :icon="['fa', 'random']"/></div>Shuffle Playlist</nuxt-link>
+                            <nuxt-link class="navLink" to="/playlist/generate"><div class="iconCon"><fa class="fas" :icon="['fa', 'redo']"/></div>Generate Playlists</nuxt-link>
+                            <nuxt-link class="navLink" to="/playlist/duplicates"><div class="iconCon"><fa class="fas" :icon="['fa', 'clone']"/></div>Remove Duplicates</nuxt-link>
+                        </nav>
+                    </div>
+    
+                    <!-- Footer --> 
+                    <div class="navFootCon">
+                        <p class="powererdByP">Powered By Melody Melon</p>
+                        <p><nuxt-link to="/terms-service">Terms Service</nuxt-link> & <nuxt-link to="/privacy-policy">Privacy Policy</nuxt-link></p>
+                    </div>
+        
+            </Simplebar>
+        </div>
+
+        <div class="siteOverlay" :class="{ navActive : navStatus }" v-on:click="$store.commit('toggleNav')"></div>
     </div>
 </template>
 
@@ -38,7 +42,12 @@ export default {
     components: {
         Simplebar,
         UserInfoSection
-    }
+    },
+    computed: {
+        navStatus() {
+            return this.$store.state.siteFunction.navStatus
+        }
+    },
 }
 </script>
 
@@ -52,6 +61,8 @@ export default {
     background-color: var(--background-2);
     border-radius: 0 0 20px 0;
     border-right: 1px solid var(--border);
+    transition: 0.2s;
+    z-index: 1001;
 }
 .navWrapper {
     height: 100%;
@@ -86,7 +97,7 @@ export default {
     margin-bottom: 0;
 }
 .navLink:hover {
-    background-color: #E6EBF1;
+    background-color: var(--background-1-hover);
 }
 .navLink.nuxt-link-exact-active {
     background-color: var(--accent-1);
@@ -108,8 +119,7 @@ export default {
 .navFootCon {
     width: 100%;
     align-self: flex-end;
-    padding: 0 20px;
-    margin: 20px 0;
+    padding: 60px 20px 20px;
 }
 .powererdByP {
     font-size: 14px;
@@ -127,6 +137,35 @@ export default {
 }
 .navFootCon p a:hover {
     text-decoration: underline;
+}
+
+/* Site overlay */
+.siteOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: -56px;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    transition: 0.2s;
+    pointer-events: none;
+}
+@keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+
+/* Media Queries */
+@media only screen and (max-width: 1024px) {
+    .navCon {left: -350px;}
+    .navCon.navActive {left: 0;}
+    .siteOverlay {display: flex; opacity: 0;}
+    .siteOverlay.navActive {display: flex; opacity: 1; pointer-events: all; animation: fadeIn 0.2s;}
+}
+@media only screen and (max-width: 400px) {
+    .navCon {width: calc(100% - 40px);}
 }
 </style>
 

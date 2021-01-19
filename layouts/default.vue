@@ -45,6 +45,7 @@ select {-webkit-appearance: none;}
 /* Variables */
 :root {
   --background-1: #EAEFF5;
+  --background-1-hover: #E6EBF1;
   --background-2: #FFF;
 
   --border: #DCE6F1;

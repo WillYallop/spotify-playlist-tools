@@ -28,7 +28,7 @@ export default {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog']
+          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars']
         },
         {
           set: '@fortawesome/free-brands-svg-icons',
@@ -46,5 +46,9 @@ export default {
     }
   },
   build: {
+  },
+  server: {     
+    port: process.env.PORT || 8000,
+    host: '0.0.0.0'
   }
 }
