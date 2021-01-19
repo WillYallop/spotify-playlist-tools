@@ -1,6 +1,6 @@
 <template>
     <div class="appPageCon">
-        <nuxt-link to="/">Home</nuxt-link>
+
     </div>
 </template>
 

@@ -1,8 +1,10 @@
 <template>
-  <div>
+  <div class="pageCon">
+    <div class="pageWrapper">
+      
+      <nuxt-link to="/dashboard">Dashboard</nuxt-link>
 
-    <nuxt-link to="/dashboard">Dashboard</nuxt-link>
-
+    </div>
   </div>
 </template>
 

@@ -1,8 +1,25 @@
 <template>
   <div>
-    <Nuxt />
+    <FrontendHeader/>
+    <Nuxt/>
   </div>
 </template>
+
+<script>
+// Componenets
+import FrontendHeader from '@/components/global/frontend/FrontendHeader'
+
+export default {
+  data() {
+    return {
+
+    }
+  },
+  components: {
+    FrontendHeader
+  }
+}
+</script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
@@ -21,7 +38,7 @@ body {
   -webkit-text-size-adjust: 100%;
   min-height: 100%;
   height: 100%;
-  background-color: var(--background-1);
+  background-color: var(--background-2);
 }
 
 textarea {font-family: 'Montserrat', sans-serif !important;}
@@ -33,7 +50,7 @@ input {font-family: 'Montserrat', sans-serif !important;}
 textarea:focus {outline: none;}
 select:focus {outline: none;}
 select {-webkit-appearance: none;}
-::selection {background-color: #1B7DF1; color: #FFF;}
+::selection {background-color: #3C50E0; color: #FFF;}
 
 *,
 *::before,
@@ -50,8 +67,8 @@ select {-webkit-appearance: none;}
 
   --border: #DCE6F1;
 
-  --accent-1: #1B7DF1;
-  --accent-1-hover: #1770DA;
+  --accent-1: #3C50E0;
+  --accent-1-hover: #3B4ED5;
 
   --title-text: #393C41;
   --body-text: #606368;
@@ -62,11 +79,13 @@ select {-webkit-appearance: none;}
 
 /* Page */
 .pageCon {
-  padding-left: 350px;
+  padding-top: 60px;
   width: 100%;
 }
 .pageWrapper {
   padding: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 .inputStyle {
@@ -83,7 +102,6 @@ select {-webkit-appearance: none;}
 .inputStyle::placeholder {
   color: var(--body-text);
 }
-
 .errorMsg {
   color: var(--error-text);
   font-size: 14px;

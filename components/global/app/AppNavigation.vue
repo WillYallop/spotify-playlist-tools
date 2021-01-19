@@ -9,9 +9,9 @@
                         <!-- Navigation -->
                         <nav class="navLinksCon">
                             <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard"><div class="iconCon"><fa class="fas" :icon="['fa', 'tachometer-alt']"/></div>Dashbaord</nuxt-link>
-                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/playlist/shuffle"><div class="iconCon"><fa class="fas" :icon="['fa', 'random']"/></div>Shuffle Playlist</nuxt-link>
-                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/playlist/generate"><div class="iconCon"><fa class="fas" :icon="['fa', 'redo']"/></div>Generate Playlists</nuxt-link>
-                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/playlist/duplicates"><div class="iconCon"><fa class="fas" :icon="['fa', 'clone']"/></div>Remove Duplicates</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard/playlist/shuffle"><div class="iconCon"><fa class="fas" :icon="['fa', 'random']"/></div>Shuffle Playlist</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard/playlist/generate"><div class="iconCon"><fa class="fas" :icon="['fa', 'redo']"/></div>Generate Playlists</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard/playlist/duplicates"><div class="iconCon"><fa class="fas" :icon="['fa', 'clone']"/></div>Remove Duplicates</nuxt-link>
                         </nav>
                     </div>
     
@@ -31,7 +31,7 @@
 <script>
 // Componenets
 import Simplebar from 'simplebar-vue'
-import UserInfoSection from '@/components/global/navigation/UserInfoSection'
+import UserInfoSection from '@/components/global/app/navigation/UserInfoSection'
 
 export default {
     data() {

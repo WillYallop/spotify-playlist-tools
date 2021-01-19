@@ -2,7 +2,7 @@
   <div class="headerCon">
     <div class="headerWrapper">
       <div class="leftSide">
-        <img src="../../assets/images/logo.png" class="siteLogo">
+        <img src="../../../assets/images/logo.png" class="siteLogo">
       </div>
       <div class="rightSide">
         <button class="settingsBtn"><fa class="fas" :icon="['fa', 'cog']"/></button>

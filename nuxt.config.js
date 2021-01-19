@@ -28,11 +28,11 @@ export default {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars']
+          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars', 'faHome']
         },
         {
           set: '@fortawesome/free-brands-svg-icons',
-          icons: ['faSpotify']
+          icons: ['faSpotify', 'faGoogle']
         }
       ]
     }],

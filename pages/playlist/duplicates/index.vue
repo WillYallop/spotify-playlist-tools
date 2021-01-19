@@ -1,12 +1,11 @@
 <template>
-    <div>
+    <div class="pageCon">
 
     </div>
 </template>
 
 <script>
 export default {
-    layout: 'app',
     data() {
         return {
 
