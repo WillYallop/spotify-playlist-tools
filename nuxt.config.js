@@ -16,19 +16,22 @@ export default {
     'simplebar/dist/simplebar.min.css',
   ],
   plugins: [
+    
   ],
   components: true,
   buildModules: [
+    '@nuxtjs/dotenv'
   ],
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    '@nuxtjs/auth-next',
     ['nuxt-fontawesome', {
       component: 'fa',
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars', 'faHome']
+          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars', 'faHome','faUnlockAlt', 'faEye', 'faEyeSlash']
         },
         {
           set: '@fortawesome/free-brands-svg-icons',
@@ -37,7 +40,34 @@ export default {
       ]
     }],
   ],
+  auth: {
+    redirect: {
+      login: '/sign-in',
+      callback: '/sign-in?googleauth=true',
+      home: false
+    },
+    strategies: {
+      local: {
+        token: {
+          property: 'token',
+        },
+        user: {
+          property: 'data',
+        },
+        endpoints: {
+          login: { url: '/user/signin', method: 'post' },
+          user: { url: '/user', method: 'get', headers: { 'Auth-Strategy': 'local' } },
+          logout: false
+        }
+      },
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        codeChallengeMethod: ''
+      },
+    }
+  },
   axios: {
+    baseURL: 'https://playlist-tools-api.herokuapp.com/v1'
 
   },
   pwa: {
@@ -47,8 +77,5 @@ export default {
   },
   build: {
   },
-  server: {     
-    port: process.env.PORT || 8000,
-    host: '0.0.0.0'
-  }
+
 }

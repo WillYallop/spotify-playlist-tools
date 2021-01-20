@@ -17,6 +17,7 @@
     
                     <!-- Footer --> 
                     <div class="navFootCon">
+                        <button class="signOutBtn" v-on:click="$auth.logout()">Sign Out</button>
                         <p class="powererdByP">Powered By Melody Melon</p>
                         <p><nuxt-link to="/terms-service">Terms Service</nuxt-link> & <nuxt-link to="/privacy-policy">Privacy Policy</nuxt-link></p>
                     </div>

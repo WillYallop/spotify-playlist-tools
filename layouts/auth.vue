@@ -82,8 +82,8 @@
   padding: 40px 40px 0;
 } 
 .authSiteLogo {
-  width: 210px;
-  height: 30px;
+  height: 35px;
+  width: 114px;
 }
 .authHomeLink {
   background-color: var(--background-1);

@@ -12,6 +12,7 @@ import AppHeader from '@/components/global/app/AppHeader'
 import SiteNavigation from '@/components/global/app/AppNavigation'
 
 export default {
+  name: 'app',
   data() {
     return {
 

@@ -52,8 +52,8 @@ export default {
   align-items: center;
 }
 .siteLogo {
-  width: 210px;
-  height: 30px;
+  height: 35px;
+  width: 114px;
 }
 
 .rightSide {
