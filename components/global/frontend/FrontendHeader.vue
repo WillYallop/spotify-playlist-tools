@@ -2,16 +2,22 @@
   <div class="headerCon">
     <div class="headerWrapper pageWrapper">
       <div class="leftSide">
-        <img src="../../../assets/images/logo.png" class="siteLogo">
+        <nuxt-link class="siteLogo" to="/"><img src="../../../assets/images/logo.png" class="siteLogo"></nuxt-link>
       </div>
       <div class="rightSide">
-        <nuxt-link class="headerLink" to="/">Home</nuxt-link>
-        <nuxt-link class="headerLink" to="/playlist/shuffle">Shuffle Playlist</nuxt-link>
-        <nuxt-link class="headerLink" to="/playlist/generate">Generate Playlist</nuxt-link>
-        <nuxt-link class="headerLink" to="/playlist/duplicates">Remove Duplicates</nuxt-link>
+        <nav class="desktopNav">
+          <nuxt-link class="headerLink" to="/playlist/shuffle">Shuffle Playlist</nuxt-link>
+          <nuxt-link class="headerLink" to="/playlist/generate">Generate Playlist</nuxt-link>
+          <nuxt-link class="headerLink" to="/playlist/duplicates">Remove Duplicates</nuxt-link>
 
-        <nuxt-link to="/sign-in" class="signInLink">Sign In</nuxt-link>
-        <nuxt-link to="/sign-up" class="signUpLink">Sign Up</nuxt-link>
+          <nuxt-link to="/sign-in" class="signInLink">Sign In</nuxt-link>
+          <nuxt-link to="/sign-up" class="signUpLink">Sign Up</nuxt-link>
+        </nav>
+
+        <div class="mobileBtns">
+          <button v-on:click="$store.commit('toggleFrontendNav')" class="navigationBtn"><fa class="fas" :icon="['fa', 'bars']"/></button>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -53,6 +59,7 @@ export default {
 }
 .siteLogo {
   width: 210px;
+  height: 30px;
 }
 
 /* Right Side */
@@ -60,16 +67,20 @@ export default {
   display: flex;
   align-items: center;
 } 
+.desktopNav {
+  display: flex;
+  align-items: center;
+}
 .headerLink {
   margin-right: 20px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   color: var(--title-text);
   text-decoration: none;
 } 
 
 .signInLink {
-  padding: 8px 40px;
+  padding: 8px 30px;
   display: block;
   background-color: transparent;
   border: 2px solid var(--accent-1);
@@ -81,9 +92,15 @@ export default {
   text-decoration: none;
   margin-right: 10px;
   margin-left: 20px;
+  transition: 0.2s;
 } 
+.signInLink:hover {
+  background-color: var(--accent-1-hover);
+  border: 2px solid var(--accent-1-hover);
+  color: #FFF;
+}
 .signUpLink {
-  padding: 8px 40px;
+  padding: 8px 30px;
   display: block;
   background-color: var(--accent-1);
   border: 2px solid var(--accent-1);
@@ -93,6 +110,41 @@ export default {
   font-weight: bold;
   border-radius: 10px;
   text-decoration: none;
+  transition: 0.2s;
+}
+.signUpLink:hover {
+  background-color: var(--accent-1-hover);
+  border: 2px solid var(--accent-1-hover);
 }
 
+/* Mobile btn */
+.mobileBtns {
+  display: none;
+}
+.navigationBtn {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: var(--background-1);
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.navigationBtn .fas {
+  color: var(--title-text);
+  font-size: 16px;
+}
+.navigationBtn:hover {
+  background-color: var(--background-1-hover);
+}
+
+/* Media Queries */
+@media only screen and (max-width: 1024px) {
+  .desktopNav {display: none;}
+  .mobileBtns {display: flex;}
+}
 </style>

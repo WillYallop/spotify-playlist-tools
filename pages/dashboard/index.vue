@@ -1,6 +1,9 @@
 <template>
     <div class="appPageCon">
-        <nuxt-link to="/">Home</nuxt-link>
+        <div class="appPageWrapper">
+            <h1>Dashboard</h1>
+            <nuxt-link to="/">Home</nuxt-link>
+        </div>
     </div>
 </template>
 

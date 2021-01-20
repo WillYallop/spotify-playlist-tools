@@ -12,15 +12,15 @@ import AppHeader from '@/components/global/app/AppHeader'
 import SiteNavigation from '@/components/global/app/AppNavigation'
 
 export default {
-    data() {
-        return {
+  data() {
+    return {
 
-        }
-    },
-    components: {
-        AppHeader,
-        SiteNavigation
     }
+  },
+  components: {
+    AppHeader,
+    SiteNavigation
+  }
 }
 </script>
 
@@ -32,7 +32,11 @@ export default {
   padding-top: 60px;
   width: 100%;
   min-height: 100vh;
+  height: 100%;
   background-color: var(--background-1)
+}
+.appPageWrapper {
+  padding: 20px;
 }
 
 /* Media Queries */

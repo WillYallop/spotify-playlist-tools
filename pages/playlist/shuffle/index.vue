@@ -1,6 +1,8 @@
 <template>
     <div class="pageCon">
-
+        <div class="pageWrapper">
+            <h1>Shuffle Playlists</h1>
+        </div>
     </div>
 </template>
 

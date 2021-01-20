@@ -64,6 +64,7 @@ export default {
     border: none;
     margin-right: 5px;
     cursor: pointer;
+    overflow: hidden;
 } 
 .altAccountImg img {
     height: 30px;

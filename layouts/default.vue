@@ -1,6 +1,7 @@
 <template>
   <div>
     <FrontendHeader/>
+    <FrontendNavigation/>
     <Nuxt/>
   </div>
 </template>
@@ -8,6 +9,7 @@
 <script>
 // Componenets
 import FrontendHeader from '@/components/global/frontend/FrontendHeader'
+import FrontendNavigation from '@/components/global/frontend/FrontendNavigation'
 
 export default {
   data() {
@@ -16,7 +18,8 @@ export default {
     }
   },
   components: {
-    FrontendHeader
+    FrontendHeader,
+    FrontendNavigation
   }
 }
 </script>
@@ -44,8 +47,7 @@ body {
 textarea {font-family: 'Montserrat', sans-serif !important;}
 button {font-family: 'Montserrat', sans-serif !important;}
 button:focus {outline: none;}
-input:focus {outline: none;}
-.inputStyle {-webkit-appearance: none;}
+input:focus {outline: none; border: 1px solid var(--accent-1);}
 input {font-family: 'Montserrat', sans-serif !important;} 
 textarea:focus {outline: none;}
 select:focus {outline: none;}
@@ -68,7 +70,7 @@ select {-webkit-appearance: none;}
   --border: #DCE6F1;
 
   --accent-1: #3C50E0;
-  --accent-1-hover: #3B4ED5;
+  --accent-1-hover: #3749CD;
 
   --title-text: #393C41;
   --body-text: #606368;
@@ -98,6 +100,7 @@ select {-webkit-appearance: none;}
   font-size: 14px;
   color: var(--body-text);
   border: 1px solid var(--background-1);
+  -webkit-appearance: none;
 }
 .inputStyle::placeholder {
   color: var(--body-text);

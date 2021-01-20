@@ -155,7 +155,7 @@ export default {
 
 /* Media Queries */
 @media only screen and (max-width: 1024px) {
-    .navCon {left: -350px;}
+    .navCon {left: -350px; border-radius: 0 20px 20px 0;}
     .navCon.navActive {left: 0;}
     .siteOverlay {display: flex; opacity: 0;}
     .siteOverlay.navActive {display: flex; opacity: 1; pointer-events: all;}
