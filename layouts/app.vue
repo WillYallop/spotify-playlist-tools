@@ -2,6 +2,7 @@
   <div>
     <AppHeader/>
     <SiteNavigation/>
+    <Message/>
     <Nuxt/>
   </div>
 </template>
@@ -10,6 +11,7 @@
 // Componenets
 import AppHeader from '@/components/global/app/AppHeader'
 import SiteNavigation from '@/components/global/app/AppNavigation'
+import Message from '@/components/global/app/Message'
 
 export default {
   name: 'app',
@@ -25,7 +27,8 @@ export default {
   },
   components: {
     AppHeader,
-    SiteNavigation
+    SiteNavigation,
+    Message
   }
 }
 </script>

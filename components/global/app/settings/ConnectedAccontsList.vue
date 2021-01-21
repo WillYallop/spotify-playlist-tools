@@ -1,54 +1,21 @@
 <template>
     <div class="accountsCon"> 
 
-        <div class="accountRow">
+        <div class="accountRow" :key="account._id" v-for="account in accounts">
             <div class="leftSideCon">
-                <img src="https://i.scdn.co/image/ab6775700000ee8521bfa14d467ad794b9dfdaaf" class="accountImg">
+                <img :src="account.image" class="accountImg">
                 <div class="accountTextarea">
-                    <p class="accountNameP">Vibe Legion</p>
-                    <p class="accountFollowersP"><span class="boldify">10</span> followers</p>
+                    <p class="accountNameP">{{account.displayName}}</p>
+                    <p class="accountFollowersP"><span class="boldify">{{account.followers}}</span> followers</p>
                 </div>
             </div>
             <div class="rightSideCon">
                 <div class="accountTypeIconCon">
-                    <fa class="fas spoityIcon" :icon="['fab', 'spotify']"/>
+                    <fa v-if="account.accountType === 'spotify'" class="fas spoityIcon" :icon="['fab', 'spotify']"/>
                 </div>
                 <button class="removeAccountBtn"><fa class="fas" :icon="['fa', 'trash']"/></button>
             </div>
         </div>
-
-        <!-- TEMP -->
-        <div class="accountRow">
-            <div class="leftSideCon">
-                <img src="https://i.scdn.co/image/ab6775700000ee8579237c6b8df7daa5b251190c" class="accountImg">
-                <div class="accountTextarea">
-                    <p class="accountNameP">Melody Melon</p>
-                    <p class="accountFollowersP"><span class="boldify">22</span> followers</p>
-                </div>
-            </div>
-            <div class="rightSideCon">
-                <div class="accountTypeIconCon">
-                    <fa class="fas spoityIcon" :icon="['fab', 'spotify']"/>
-                </div>
-                <button class="removeAccountBtn"><fa class="fas" :icon="['fa', 'trash']"/></button>
-            </div>
-        </div>
-        <div class="accountRow">
-            <div class="leftSideCon">
-                <img src="https://i.scdn.co/image/ab6775700000ee8521bfa14d467ad794b9dfdaaf" class="accountImg">
-                <div class="accountTextarea">
-                    <p class="accountNameP">Vibe Legion</p>
-                    <p class="accountFollowersP"><span class="boldify">10</span> followers</p>
-                </div>
-            </div>
-            <div class="rightSideCon">
-                <div class="accountTypeIconCon">
-                    <fa class="fas appleIcon" :icon="['fab', 'apple']"/>
-                </div>
-                <button class="removeAccountBtn"><fa class="fas" :icon="['fa', 'trash']"/></button>
-            </div>
-        </div>
-        <!-- TEMP -->
 
     </div>
 </template>
@@ -60,6 +27,14 @@ export default {
 
         }
     },
+    mounted() {
+        this.$store.dispatch('getAccounts');
+    },
+    computed: {
+        accounts() {
+            return this.$store.state.accounts.accounts
+        }
+    }
 
 }
 </script>
