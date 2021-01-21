@@ -13,10 +13,15 @@ import SiteNavigation from '@/components/global/app/AppNavigation'
 
 export default {
   name: 'app',
+  middleware: 'auth-only',
   data() {
     return {
 
     }
+  },
+  mounted() {
+    this.$store.dispatch('getUserData') // Load user data
+    this.$store.dispatch('getActions') // Get actions info
   },
   components: {
     AppHeader,

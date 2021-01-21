@@ -1,6 +1,6 @@
 <template>
   <div class="authBoxInner">
-    <h2 class="authBoxHeading">Sign up to Playlist Tools</h2>
+    <h2 class="authBoxHeading">Sign up to Playlist Engine</h2>
     <p class="authBoxSubheading">Don't have an account? <nuxt-link to="/sign-in">Sign In</nuxt-link></p>
     <div class="authOptionsCon">
       <button v-on:click="signInWithGoogle" class="googleSignInBtn"><img src="../../assets/images/googleIcon.png" alt="Sign Up with Google" class="iconImg">Sign Up With Google</button>

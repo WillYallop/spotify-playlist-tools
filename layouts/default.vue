@@ -72,6 +72,9 @@ select {-webkit-appearance: none;}
   --accent-1: #3C50E0;
   --accent-1-hover: #3749CD;
 
+  --accent-2: #20BF55;
+  --accent-2-hover: #1DA84B;
+
   --title-text: #393C41;
   --body-text: #606368;
   --non-focused-text: #8C8C8C;
@@ -109,5 +112,10 @@ select {-webkit-appearance: none;}
   color: var(--error-text);
   font-size: 14px;
   margin-top: 5px;
+}
+
+.boldify {
+  font-weight: bold;
+  color: var(--title-text);
 }
 </style>

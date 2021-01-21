@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    layout: 'app',
+    layout: 'app',  
     data() {
         return {
 

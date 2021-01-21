@@ -1,6 +1,11 @@
 <template>
     <div class="appPageCon">
+
+        <!-- Usage Breakdown -->
+        <UsageBreakdown/>
+
         <div class="appPageWrapper">
+            
             <h1>Dashboard</h1>
             <nuxt-link to="/">Home</nuxt-link>
             {{$auth.user}}
@@ -14,12 +19,18 @@
 // Libs
 import axios from 'axios'
 
+// Components
+import UsageBreakdown from '@/components/global/app/UsageBreakdown'
+
 export default {
     layout: 'app',
     data() {
         return {
 
         }
+    },
+    components: {
+        UsageBreakdown
     },
     methods: {
         test2() {

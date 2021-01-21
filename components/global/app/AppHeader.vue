@@ -5,7 +5,7 @@
         <nuxt-link class="siteLogo" to="/dashboard"><img src="../../../assets/images/logo.png" class="siteLogo"></nuxt-link>
       </div>
       <div class="rightSide">
-        <button class="settingsBtn"><fa class="fas" :icon="['fa', 'cog']"/></button>
+        <button class="settingsBtn" v-on:click="$router.push('/settings')"><fa class="fas" :icon="['fa', 'cog']"/></button>
         <button class="settingsBtn navToggleBtn" v-on:click="$store.commit('toggleNav')"><fa class="fas" :icon="['fa', 'bars']"/></button>
       </div>
     </div>
@@ -53,7 +53,7 @@ export default {
 }
 .siteLogo {
   height: 35px;
-  width: 114px;
+  width: 132px;
 }
 
 .rightSide {

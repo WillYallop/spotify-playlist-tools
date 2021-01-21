@@ -21,6 +21,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  middleware: 'guest-only'
+}
+</script>
+
 <style scoped>
 .authLayoutCon {
   display: flex;
@@ -83,7 +89,7 @@
 } 
 .authSiteLogo {
   height: 35px;
-  width: 114px;
+  width: 132px;
 }
 .authHomeLink {
   background-color: var(--background-1);

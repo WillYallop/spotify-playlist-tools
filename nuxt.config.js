@@ -2,7 +2,7 @@ export default {
   ssr: false,
   target: 'static',
   head: {
-    title: 'spotify-playlist-tools',
+    title: 'Playlist Engine',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -16,7 +16,7 @@ export default {
     'simplebar/dist/simplebar.min.css',
   ],
   plugins: [
-    
+    '~/plugins/filters'
   ],
   components: true,
   buildModules: [
@@ -31,11 +31,11 @@ export default {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars', 'faHome','faUnlockAlt', 'faEye', 'faEyeSlash']
+          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars', 'faHome','faUnlockAlt', 'faEye', 'faEyeSlash', 'faTrash']
         },
         {
           set: '@fortawesome/free-brands-svg-icons',
-          icons: ['faSpotify', 'faGoogle']
+          icons: ['faSpotify', 'faGoogle', 'faApple']
         }
       ]
     }],

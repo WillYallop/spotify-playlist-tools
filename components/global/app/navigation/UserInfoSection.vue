@@ -11,7 +11,7 @@
         </div>
         <div class="userInfoTextarea">
             <p class="spotifyUsername">William Yallop</p>
-            <p class="spotifyInfoP"><span style="font-weight:bold;">10</span> Actions Remaining</p>
+            <p class="spotifyInfoP" v-if="actions"><span style="font-weight:bold;">{{actions}}</span> Actions Remaining</p>
             <div class="spotifyInfoPCon">
                 <p class="spotifyInfoP"><span style="font-weight:bold;">0</span> Followers</p>
                 <p class="spotifyInfoP"><span style="font-weight:bold;">0</span> Playlists</p>
@@ -25,6 +25,11 @@ export default {
     data() {
         return {
 
+        }
+    },
+    computed: {
+        actions() {
+            return this.$store.state.actionHandler.actions
         }
     }
 }

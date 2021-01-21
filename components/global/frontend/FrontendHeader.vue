@@ -59,7 +59,7 @@ export default {
 }
 .siteLogo {
   height: 35px;
-  width: 114px;
+  width: 132px;
 }
 
 /* Right Side */
