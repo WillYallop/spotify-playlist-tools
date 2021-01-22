@@ -1,14 +1,14 @@
 <template>
     <div class="appPageCon">
         <div class="appPageWrapper">
-            <h1>Generate Playlists</h1>
+            <h1>Playlist Manager</h1>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    layout: 'app',
+    layout: 'app',  
     data() {
         return {
 

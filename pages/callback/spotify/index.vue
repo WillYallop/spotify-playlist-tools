@@ -7,6 +7,7 @@
 <script>
 export default {
     layout: 'blank',
+    middleware: 'auth-only',
     data() {
         return {
 

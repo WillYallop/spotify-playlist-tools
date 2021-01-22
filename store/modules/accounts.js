@@ -1,10 +1,16 @@
 import axios from 'axios';
 
 const state = () => ({
+    selectedAccount: false,
     accounts: []
 })
   
 const mutations = {
+    // selected account
+    selectAccount(state, data) {
+        state.selectedAccount = data
+    },
+    // accounts 
     setAccountsData(state, data) {
         state.accounts = data
     },
@@ -15,7 +21,7 @@ const mutations = {
 }
 
 const actions = {
-    saveNewAccount({ commit }, data) {
+    saveNewAccount({ commit, state }, data) {
         let config = {
             headers: {
                 'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
@@ -23,6 +29,7 @@ const actions = {
             }
         }
         axios.post(process.env.API_URL + '/accounts', {
+            playlists: data.playlistTotal,
             accountId: data.accountData.id,
             accountType: data.accountType,
             accessToken: data.accessToken,
@@ -34,7 +41,13 @@ const actions = {
             image: data.accountData.images[0].url
         }, config)
         .then((response) => {
-            commit('addNewAccount', response.data)
+            // If this is the first load, set the selected account
+            if(state.accounts.length === 0) {
+                commit('addNewAccount', response.data)
+                commit('selectAccount', state.accounts[0])
+            } else {
+                commit('addNewAccount', response.data)
+            }
             commit('setMessage', 'New Spotify account successfully added!')
         })
         .catch((err) => {
@@ -45,7 +58,7 @@ const actions = {
             }
         })
     },
-    getAccounts({ commit }) {
+    getAccounts({ commit, state }) {
         let config = {
             headers: {
                 'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
@@ -54,7 +67,13 @@ const actions = {
         }
         axios.get(process.env.API_URL + '/accounts', config)
         .then((response) => {
-            commit('setAccountsData', response.data)
+            // If this is the first load, set the selected account
+            if(state.accounts.length === 0) {
+                commit('setAccountsData', response.data)
+                commit('selectAccount', state.accounts[0])
+            } else {
+                commit('setAccountsData', response.data)
+            }
         })
         .catch((err) => {
             console.log(err)

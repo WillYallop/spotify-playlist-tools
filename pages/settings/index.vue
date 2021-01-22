@@ -22,7 +22,7 @@
             </div>
             
             <!-- Connected Accounts -->
-            <div class="settingsSectCon">
+            <div v-if="accounts.length > 0" class="settingsSectCon">
                 <div class="settingsSectHeader">
                     <p class="sectTitleP">Your Accounts</p>
                     <p class="sectSubTitleP">Manage your music platform accounts.</p>
@@ -35,13 +35,10 @@
 </template>
 
 <script>
-// Libs
-import axios from 'axios'
-
 // Components
 import UsageBreakdown from '@/components/global/app/UsageBreakdown'
-import InfoSection from '@/components/global/app/settings/InfoSection'
-import ConnectedAccontsList from '@/components/global/app/settings/ConnectedAccontsList'
+import InfoSection from '@/components/app/settings/InfoSection'
+import ConnectedAccontsList from '@/components/app/settings/ConnectedAccontsList'
 
 export default {
     layout: 'app',
@@ -54,6 +51,11 @@ export default {
         UsageBreakdown,
         InfoSection,
         ConnectedAccontsList
+    },
+    computed: {
+        accounts() {
+            return this.$store.state.accounts.accounts
+        }
     },
     methods: {
         addSpotifyAccount() {

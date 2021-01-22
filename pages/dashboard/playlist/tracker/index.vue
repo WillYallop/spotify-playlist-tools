@@ -1,14 +1,14 @@
 <template>
     <div class="appPageCon">
         <div class="appPageWrapper">
-            <h1>Playlist Shuffle</h1>
+            <h1>Playlist Tracker</h1>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    layout: 'app',
+    layout: 'app',  
     data() {
         return {
 

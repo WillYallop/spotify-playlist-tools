@@ -54,20 +54,28 @@ const actions = {
         }
         axios.get('https://api.spotify.com/v1/me', config)
         .then((results) => {
-            let obj = {
-                accessToken: data.accessToken,
-                refreshToken: data.refreshToken,
-                accountData: results.data,
-                accountType: 'spotify'
-            }
-            dispatch('saveNewAccount', obj)
-            commit('wipeCallbackData')
-            this.$router.push('/settings')
+            const userResults = results;
+            axios.get('https://api.spotify.com/v1/me/playlists', config)
+            .then((response) => {
+                let obj = {
+                    playlistTotal: response.data.total,
+                    accessToken: data.accessToken,
+                    refreshToken: data.refreshToken,
+                    accountData: userResults.data,
+                    accountType: 'spotify'
+                }
+                dispatch('saveNewAccount', obj)
+                commit('wipeCallbackData')
+                this.$router.push('/settings')
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         })
         .catch((err) => {
             console.log(err)
         })
-    },
+    }
 }
 
 export default {
