@@ -6,12 +6,12 @@
         <div class="settingsCon appPageWrapper">
 
             <!-- Connected Accounts -->
-            <div class="settingsSectCon">
+            <div class="sectionCon">
                 <InfoSection/> 
             </div>
 
             <!-- Connect New Account -->
-            <div class="settingsSectCon">
+            <div class="sectionCon">
                 <div class="settingsSectHeader">
                     <p class="sectTitleP">Connected New Account</p>
                     <p class="sectSubTitleP"><span class="boldify">IMPORTANT:</span> When adding a new account if you are already logged into Spotify or Apple Music on your browser it will automatically link the account. If this is not the account you want to add you must clear your browsers cache or complete this task in an incognito window.</p>
@@ -22,7 +22,7 @@
             </div>
             
             <!-- Connected Accounts -->
-            <div v-if="accounts.length > 0" class="settingsSectCon">
+            <div v-if="accounts.length > 0" class="sectionCon">
                 <div class="settingsSectHeader">
                     <p class="sectTitleP">Your Accounts</p>
                     <p class="sectSubTitleP">Manage your music platform accounts.</p>
@@ -72,16 +72,6 @@ export default {
     z-index: 10;
     position: relative;
 } 
-.settingsSectCon {
-    background-color: var(--background-2);
-    border: 1px solid var(--border);
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-.settingsSectCon:last-child {
-    margin-bottom: 0;
-}
 .settingsSectHeader {
     width: 100%;
     padding-bottom: 10px;

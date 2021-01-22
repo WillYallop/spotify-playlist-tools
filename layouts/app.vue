@@ -48,6 +48,17 @@ export default {
   padding: 20px;
 }
 
+.sectionCon {
+  background-color: var(--background-2);
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.sectionCon:last-child {
+  margin-bottom: 0;
+}
+
 /* Media Queries */
 @media only screen and (max-width: 1024px) {
   .appPageCon {padding-left: 0;}

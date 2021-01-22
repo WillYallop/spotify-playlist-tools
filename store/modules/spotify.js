@@ -75,7 +75,42 @@ const actions = {
         .catch((err) => {
             console.log(err)
         })
+    },
+
+    // Refresh account tokens
+    refreshTokens({ commit, dispatch }, data) {
+        return new Promise((resolve, reject) => {
+            let tokenHeader = {
+                headers: {
+                    Authorization: 'Basic '+ process.env.SPOTIFY_CLIENT_AUTH, 
+                    'Content-Type': 'application/x-www-form-urlencoded' 
+                }
+            }
+            // body
+            var requestBody = {
+                grant_type: 'refresh_token',
+                refresh_token: data.refreshToken
+            }
+            axios.post('https://accounts.spotify.com/api/token', qs.stringify(requestBody), tokenHeader)
+            .then((response) => {
+                commit('setNewAccessToken', {
+                    accessToken: response.data.access_token,
+                    accountId: data.accountId
+                })
+                dispatch('updateAccountDb', {
+                    accessToken: response.data.access_token,
+                    accountId: data.accountId,
+                    accountType: 'spotify'
+                })
+                resolve(response)
+            })
+            .catch((err) => {
+                console.log(err)
+                reject(err)
+            }) 
+        })
     }
+
 }
 
 export default {

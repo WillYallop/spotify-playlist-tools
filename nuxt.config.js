@@ -16,7 +16,7 @@ export default {
     'simplebar/dist/simplebar.min.css',
   ],
   plugins: [
-    '~/plugins/filters',
+    { src: '~/plugins/filters' },
     { src: '~/plugins/vue-closable.js', ssr: false },
   ],
   components: true,

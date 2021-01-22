@@ -215,7 +215,7 @@ export default {
 
 /* Alt account dropdown */
 .altAccDropdownCon {
-    background-color: #2E3135;
+    background-color: var(--background-3);
     padding: 5px;
     border-radius: 10px;
     position: absolute;
@@ -224,7 +224,6 @@ export default {
     top: 40px;
 } 
 .altAccInner {
-
     max-height: 100px;
 } 
 .altAccRow {
@@ -242,7 +241,7 @@ export default {
     transition: 0.2s;
 } 
 .altAccRowInner:hover {
-    background-color: #222427;
+    background-color: var(--background-3-hover);
 }
 .altAccRowInner .fas {
     color: var(--accent-2);

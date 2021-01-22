@@ -16,6 +16,17 @@ const mutations = {
     },
     addNewAccount(state, data) {
         state.accounts.push(data)
+    },
+
+    // Set new account token
+    setNewAccessToken(state, data) {
+        // Update access token in account array
+        let accountIndex = state.accounts.findIndex( x => x.accountId === data.accountId)
+        state.accounts[accountIndex].accessToken = data.accessToken
+        // Update access token in selected account
+        if(state.selectedAccount.accountId === data.accountId) {
+            state.selectedAccount.accessToken = data.accessToken
+        }
     }
 
 }
@@ -74,6 +85,25 @@ const actions = {
             } else {
                 commit('setAccountsData', response.data)
             }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    },
+    updateAccountDb({  }, data) {
+        let config = {
+            headers: {
+                'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
+                'Authorization': this.$auth.strategy.token.get()
+            }
+        }
+        axios.post(process.env.API_URL + '/accounts/update/tokens', {
+            accessToken: data.accessToken,
+            accountId: data.accountId,
+            accountType: data.accountType
+        }, config)
+        .then((response) => {
+
         })
         .catch((err) => {
             console.log(err)
