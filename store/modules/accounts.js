@@ -2,7 +2,8 @@ import axios from 'axios';
 
 const state = () => ({
     selectedAccount: false,
-    accounts: []
+    accounts: [],
+    locked: false
 })
   
 const mutations = {
@@ -17,7 +18,10 @@ const mutations = {
     addNewAccount(state, data) {
         state.accounts.push(data)
     },
-
+    // Lock acount
+    toggleAccountLock(state, data) {
+        state.locked = data
+    },
     // Set new account token
     setNewAccessToken(state, data) {
         // Update access token in account array

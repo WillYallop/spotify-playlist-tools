@@ -51,28 +51,24 @@
 </template>
 
 <script>
-// Libs
-import axios from 'axios'
 // Componenets
 import Simplebar from 'simplebar-vue'
 
 export default {
     data() {
         return {
-            tracks: [],
-            playlistTrackData: [],
-            retryDownloadTracks: 0
+
         }
-    },
-    props: {
-        playlist: Object
     },
     components: {
         Simplebar
     },
     computed: {
-        selectedAccount() {
-            return this.$store.state.accounts.selectedAccount
+        playlist() {
+            return this.$store.state.spotifyPlaylists.selectedPlaylist
+        },
+        tracks() {
+            return this.$store.state.spotifyTracks.tracks
         },
         hasPlaylist() {
             for(var prop in this.playlist) {
@@ -83,199 +79,25 @@ export default {
         }
     },
     methods: {
-        downloadTracks() {
-            let config = {
-                headers: {
-                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                    'Authorization': this.$auth.strategy.token.get()
-                }
-            }
-            axios.get(process.env.API_URL + '/tracks/'+this.playlist.accountType+'/'+this.playlist.playlistId, config)
-            .then((response) => {
-                // Download new playlist tracks from Spotify API
-                // Else - set saved data
-                if(response.data.update) {
-                    this.updateTracks()
-                } else {
-                    this.tracks = response.data.tracks
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                if(err.response.status === 404) {
-                    this.updateTracks()
-                }
-            })
-        },
-        updateTracks() {
-            // Header
-            let config = {
-                headers: {
-                    Authorization: 'Bearer ' + this.selectedAccount.accessToken
-                }
-            }
-            axios.get('https://api.spotify.com/v1/playlists/'+this.playlist.playlistId+'/tracks', config)
-            .then((response) => {
-                console.log(response.data)
-                // Loop over response playlists 
-                for(var i = 0; i < response.data.items.length; i++) {
-                    var track = {
-                        trackId: response.data.items[i].track.id,
-                        name: response.data.items[i].track.name,
-                        popularity: response.data.items[i].track.popularity,
-                        artists: response.data.items[i].track.artists,
-                        duration: response.data.items[i].track.duration_ms,
-                        explicit: response.data.items[i].track.explicit,
-                        images: response.data.items[i].track.album.images,
-                        trackPlatform: 'spotify'
-                    }
-                    this.tracks.push(track)
-                    this.playlistTrackData.push({
-                        id: response.data.items[i].track.id,
-                        addedAt: response.data.items[i].added_at
-                    })
-                }
-
-                if(response.data.next) {
-                    // Reset
-                    this.retryDownloadTracks = 0
-                    // Load more
-                    this.loadMoreTracks(response.data.next)
-                } else {
-                    // Done loading more
-                    // Save playlists to db
-                    this.saveTracksToDb()
-                }
-            })
-            .catch((err) => {
-                if(err.response.data.error.message === 'The access token expired') {
-                    // If token fails retry
-                    if(this.retryDownloadTracks < 1) {
-                        this.$store.dispatch('refreshTokens', {
-                            refreshToken: this.selectedAccount.refreshToken,
-                            accountId: this.selectedAccount.accountId
-                        })
-                        .then((response) => {
-                            this.updateTracks()
-                        })
-                        .catch((error) => {
-                            console.log(error)
-                        })
-                        this.retryDownloadTracks++
-                    } else if (this.retryDownloadTracks === 1) {
-                        // It has been attempted twice and still failed
-                        // Show error message
-                        this.$store.commit('setMessage', 'There was an issue getting tracks data.')
-                    }
-                }
-            })
-        },
-        loadMoreTracks(nextUrl) {
-            // Header
-            let config = {
-                headers: {
-                    Authorization: 'Bearer ' + this.selectedAccount.accessToken
-                }
-            }
-            axios.get(nextUrl, config)
-            .then((response) => {
-                // Loop over response playlists 
-                for(var i = 0; i < response.data.items.length; i++) {
-                    var track = {
-                        trackId: response.data.items[i].track.id,
-                        name: response.data.items[i].track.name,
-                        popularity: response.data.items[i].track.popularity,
-                        artists: response.data.items[i].track.artists,
-                        duration: response.data.items[i].track.duration_ms,
-                        explicit: response.data.items[i].track.explicit,
-                        images: response.data.items[i].track.album.images,
-                        trackPlatform: 'spotify'
-                    }
-                    this.tracks.push(track)
-                    this.playlistTrackData.push({
-                        id: response.data.items[i].track.id,
-                        addedAt: response.data.items[i].added_at
-                    })
-                }
-
-                if(response.data.next) {
-                    this.loadMoreTracks(response.data.next)
-                } else {
-                    // Done loading more
-                    // Save playlists to db
-                    this.saveTracksToDb()
-                    this.retryDownloadTracks = 0
-                }
-            })
-            .catch((err) => {
-                if(err.response.data.error.message === 'The access token expired') {
-                    // If token fails retry
-                    if(this.retryDownloadTracks < 1) {
-                        this.$store.dispatch('refreshTokens', {
-                            refreshToken: this.selectedAccount.refreshToken,
-                            accountId: this.selectedAccount.accountId
-                        })
-                        .then((response) => {
-                            this.loadMoreTracks(nextUrl)
-                        })
-                        .catch((error) => {
-                            console.log(error)
-                        })
-                        this.retryDownloadTracks++
-                    } else if (this.retryDownloadTracks === 1) {
-                        // It has been attempted twice and still failed
-                        // Show error message
-                        this.$store.commit('setMessage', 'There was an issue getting tracks data.')
-                    }
-                }
-            })
-        },
-        saveTracksToDb() {
-            let config = {
-                headers: {
-                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                    'Authorization': this.$auth.strategy.token.get()
-                }
-            }
-            axios.post(process.env.API_URL + '/tracks/multiple', {
-                tracks: this.tracks,
-                playlistId: this.playlist.playlistId,
-                accountId: this.selectedAccount.accountId,
-                accountType: 'spotify',
-                playlistTrackData: this.playlistTrackData
-            }, config)
-            .then((response) => {
-                this.$emit('playlist-track-data', this.playlistTrackData)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-        },
-
-        //
         dateAdded(id) {
-            if(this.playlist.tracks.length > 0) {
-                let obj = this.playlist.tracks.find(x => x.id === id)
-                let addedAtDate = obj.addedAt
+            if(this.playlist.tracks) {
+                if(this.playlist.tracks.length > 0) {
+                    let obj = this.playlist.tracks.find(x => x.id === id)
+                    if(obj) {
+                        let addedAtDate = obj.addedAt
+                        const diffTime = Math.abs(new Date() - new Date(addedAtDate));
+                        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
 
-                const diffTime = Math.abs(new Date() - new Date(addedAtDate));
-                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
-
-                if(diffDays > 10) {
-                    return new Date(addedAtDate).toLocaleDateString()
-                } else {
-                    return diffDays + ' days ago'
+                        if(diffDays > 10) {
+                            return new Date(addedAtDate).toLocaleDateString()
+                        } else {
+                            return diffDays + ' days ago'
+                        }
+                    }
                 }
             }
         },
 
-    },
-    watch: {
-        playlist() {
-            this.tracks = []
-            this.playlistTrackData = []
-            this.downloadTracks()
-        }
     }
 }
 </script>
@@ -407,6 +229,7 @@ export default {
 }
 .titleCol {
     padding-left: 10px !important;
+    padding-right: 5px !important;
     font-size: 14px !important;
 }
 </style>

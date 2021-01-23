@@ -1,6 +1,6 @@
 <template>
     <div class="userInfoCon"> 
-        <div v-if="selectedAccount">
+        <div class="userInfoWrapper" v-if="selectedAccount">
             <div class="userInfoHeader">
                 <img :src="selectedAccount.image" class="currentAccountPP">
                 <div class="switchAccountController">
@@ -44,6 +44,7 @@
                     <button class="addAccountBtn" v-on:click="addSpotifyAccount"><fa class="fas" :icon="['fab', 'spotify']"/>Add New Spotify</button>
                 </div>
 
+                
             </div>
             <div class="userInfoTextarea">
                 <p class="spotifyUsername">{{selectedAccount.displayName}}</p>
@@ -52,6 +53,10 @@
                     <p class="spotifyInfoP"><span style="font-weight:bold;">{{selectedAccount.followers}}</span> Followers</p>
                     <p class="spotifyInfoP"><span style="font-weight:bold;">{{selectedAccount.playlists}}</span> Playlists</p>
                 </div>
+            </div>
+
+            <div v-if="accountSwapLock" class="accountSwapLockCon">
+                <Skeleton :theme="'light'"/>
             </div>
         </div>
         <div v-else class="noAccounts" v-on:click="addSpotifyAccount">
@@ -64,6 +69,7 @@
 <script>
 // Componenets
 import Simplebar from 'simplebar-vue'
+import Skeleton from '@/components/global/Skeleton'
 
 export default {
     data() {
@@ -75,7 +81,8 @@ export default {
         this.$store.dispatch('getAccounts')
     },
     components: {
-        Simplebar
+        Simplebar,
+        Skeleton
     },
     computed: {
         actions() {
@@ -90,6 +97,9 @@ export default {
         accountSwitchIndicator() {
             let obj = this.accounts.find(o => o._id != this.selectedAccount._id);
             return obj
+        },
+        accountSwapLock() {
+            return this.$store.state.accounts.locked
         }
     },
     methods: {
@@ -107,6 +117,10 @@ export default {
 .userInfoCon {
     width: 100%;
     padding: 20px;
+}
+.userInfoWrapper {
+    width: 100%;
+    position: relative;
 }
 /* Header */
 .userInfoHeader {
@@ -184,6 +198,19 @@ export default {
     margin-right: 10px;
     margin-top: 2px;
 }
+
+/* Account swap lock */
+.accountSwapLockCon {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    left: -10px;
+    bottom: -10px;
+    overflow: hidden;
+    border-radius: 10px;
+    opacity: 0.9;
+}
+
 
 /* No Accounts */
 .noAccounts {

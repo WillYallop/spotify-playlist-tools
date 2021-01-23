@@ -3,6 +3,8 @@ import actionHandler from './modules/action-handler.js';
 import user from './modules/user';
 import spotify from './modules/spotify';
 import accounts from './modules/accounts';
+import spotifyPlaylists from './modules/spotify-playlists';
+import spotifyTracks from './modules/spotify-tracks';
 
 const state = () => ({
   
@@ -21,7 +23,9 @@ const modules = {
   actionHandler,
   user,
   spotify,
-  accounts
+  accounts,
+  spotifyPlaylists,
+  spotifyTracks
   
 };
 
