@@ -5,16 +5,17 @@
             <PlaylistListHeader/>
             <div class="playlistListWrapper appPageWrapper">
                 
-                <div class="sectionCon" :key="playlist.playlistId" v-for="playlist in playlists">
-                    {{playlist.name}}
-                    <p>hello</p>
-                </div>
-                
+                <SpotifyPlaylistRow :key="playlist.playlistId" v-for="playlist in playlists"
+                :playlist="playlist"
+                @preview-playlist="previewPlaylist"/>
+
             </div>
         </div>
         <!-- Playlist Preview -->
         <div class="playlistPreviewCon">
-            <SpotifyPlaylistPreview/>
+            <SpotifyPlaylistPreview
+            :playlist="selectedPlaylist"
+            @playlist-track-data="updateTrackPlaylistData"/>
         </div>
     </div>
 </template>
@@ -26,13 +27,16 @@ import axios from 'axios'
 // Components
 import SpotifyPlaylistPreview from '@/components/app/spotify/SpotifyPlaylistPreview'
 import PlaylistListHeader from '@/components/app/spotify/manager/PlaylistListHeader'
+import SpotifyPlaylistRow from '@/components/app/spotify/SpotifyPlaylistRow'
 
 export default {
     layout: 'app',  
     data() {
         return {
             playlists: [],
-            retryDownloadPlaylists: 0
+            retryDownloadPlaylists: 0,
+
+            selectedPlaylist: {}
         }
     },
     mounted() {
@@ -42,7 +46,8 @@ export default {
     },
     components: {
         SpotifyPlaylistPreview,
-        PlaylistListHeader
+        PlaylistListHeader,
+        SpotifyPlaylistRow
     },
     computed: {
         selectedAccount() {
@@ -219,6 +224,17 @@ export default {
             txt.innerHTML = html;
             return txt.value;
         },
+        // Preview Playlist
+        previewPlaylist(playlist) {
+            this.selectedPlaylist = playlist
+        },
+        // Update playlist track data
+        updateTrackPlaylistData(tracks) {
+            this.selectedPlaylist.tracks = tracks
+            let playlistIndex  = this.playlists.findIndex(x => x.playlistId === this.selectedPlaylist.playlistId)
+            this.playlists[playlistIndex].tracks = tracks
+        },
+        
     },
     watch: {
         selectedAccount() {
@@ -234,7 +250,7 @@ export default {
 <style scoped>
 /* Page Content */
 .playlistListCon {
-    padding-right: 600px;
+    padding-right: 610px;
 }
 .playlistListWrapper {
     margin-top: -40px;
@@ -245,11 +261,11 @@ export default {
 /* Playlist Preview */
 .playlistPreviewCon {
     position: fixed;
-    top: 60px;
-    right: 0;
-    bottom: 0;
+    top: 70px;
+    right: 10px;
+    bottom: 10px;
     width: 600px;
-    border-radius: 0 0 0 20px;
+    border-radius: 10px;
     overflow: hidden;
 }
 </style>

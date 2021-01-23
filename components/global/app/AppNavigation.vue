@@ -171,7 +171,7 @@ export default {
 </style>
 
 <style>
-.simplebar-content {
+.navWrapper .simplebar-content {
     height: 100%;
     display: flex;
     flex-wrap: wrap;

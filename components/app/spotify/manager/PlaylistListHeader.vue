@@ -1,11 +1,13 @@
 <template>
     <div class="playManHead">
-        <div class="playManTextarea">
-            <h1 class="playManTitle">Manage Your Playlist</h1>
-            <p class="playManSubtitleP">Select a playlist you would like to manage!</p>
-        </div>
-        <div class="breadcrumbCon">
-            <p><nuxt-link to="/dashboard">Dashboard</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link to="/dashboard/spotify/playlists">Playlists</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link to="/dashboard/spotify/playlists/manager">Manager</nuxt-link></p>
+        <div class="playManHeadWrapper">
+            <div class="playManTextarea">
+                <h1 class="playManTitle">Manage Your Playlist</h1>
+                <p class="playManSubtitleP">Select a playlist you would like to manage!</p>
+            </div>
+            <div class="breadcrumbCon">
+                <p><nuxt-link to="/dashboard">Dashboard</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link to="/dashboard/spotify/playlists">Playlists</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link to="/dashboard/spotify/playlists/manager">Manager</nuxt-link></p>
+            </div>
         </div>
     </div>
 </template>
@@ -14,9 +16,12 @@
 .playManHead {
     border-radius: 0 0 20px 20px;
     background-color: #D7DFE8;
-    padding: 20px 20px 40px;
+    width: calc(100% + 610px);
     position: relative;
     z-index: 0;
+}
+.playManHeadWrapper {
+    padding: 20px 630px 40px 20px;
 }
 .playManTextarea {
     width: 100%;
