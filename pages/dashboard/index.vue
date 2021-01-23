@@ -43,7 +43,7 @@ export default {
                     'Authorization': this.$auth.strategy.token.get()
                 }
             }
-            axios.post(process.env.API_URL + '/user/test', {
+            axios.post(process.env.API_URL + '/tracks/delete', {
                 
             }, config)
             .then((response) => {

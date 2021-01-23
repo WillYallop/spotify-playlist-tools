@@ -64,11 +64,6 @@ export default {
         }
     },
     methods: {
-        decodeHtml(html) {
-            var txt = document.createElement("textarea");
-            txt.innerHTML = html;
-            return txt.value;
-        },
         // Preview Playlist
         previewPlaylist(playlist) {
             this.$store.commit('selectPlaylist', playlist)
@@ -81,6 +76,10 @@ export default {
     },
     watch: {
         selectedAccount() {
+            this.$store.commit('toggleAccountLock', true)
+            this.$store.commit('togglePlaylistSelectLock', true)
+            this.$store.commit('resetTracks')
+            this.$store.commit('resetSelectedPlaylist')
             this.$store.dispatch('loadPlaylists', {
                 user: this.user
             })

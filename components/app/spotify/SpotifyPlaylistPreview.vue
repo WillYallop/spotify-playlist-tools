@@ -10,7 +10,7 @@
                        <div class="headTopRow">
                             <div class="playlistHeadererTextarea">
                                 <p class="playlistTitleP">{{playlist.name}}</p>
-                                <p class="playlistDescP">{{playlist.description}}</p>
+                                <p class="playlistDescP">{{ playlist.description | decodeHtml }}</p>
                             </div>
                             <div class="playlistStatsCon">
                                 <p><fa class="fas" :icon="['fa', 'users']"/>200 Followers</p>
@@ -28,8 +28,8 @@
                             <th class="dateCol" style="font-size: 14px;">DATE</th>
                             <th style="font-size: 14px;">TIME</th>
                         </tr>
-                        <tr class="trackRow" :key="track.trackId" v-for="track in tracks">
-                            <td style="font-size: 12px;">{{tracks.findIndex(x => x === track) + 1}}</td>
+                        <tr class="trackRow" :key="track.trackId" v-for="track in orderedTracks">
+                            <td style="font-size: 12px;">{{playlist.tracks.findIndex(x => x.id === track.trackId) + 1}}</td>
                             <td class="titleCol" style="font-size: 16px;">
                                 {{track.name}}
                                 <br>
@@ -60,6 +60,7 @@ export default {
 
         }
     },
+
     components: {
         Simplebar
     },
@@ -76,6 +77,17 @@ export default {
                 return true;
             }
             return false;
+        },
+        orderedTracks() {
+            if(this.tracks.length > 0) {
+                var orderedTracks = []
+                for(var i = 0; i < this.playlist.tracks.length; i++) {
+                    let obj = this.tracks.find( x => x.trackId === this.playlist.tracks[i].id )
+                    orderedTracks.push(obj)
+                }
+                return orderedTracks
+            }
+
         }
     },
     methods: {

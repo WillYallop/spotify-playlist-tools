@@ -12,10 +12,17 @@ const mutations = {
         state.playlists = data
     },
     pushToPlaylists(state, data) {
-        state.playlists = data
+        state.playlists.push(data)
     },
     resetPlaylists(state) {
         state.playlists = []
+    },
+    resetSelectedPlaylist(state) {
+        state.selectedPlaylist = {}
+    },
+    // Set playlist tracks
+    setSelectedPlaylistTracks(state, data) {
+        state.selectedPlaylist.tracks = data
     },
     // Toggle playlist select lock
     togglePlaylistSelectLock(state, data) {
@@ -28,13 +35,9 @@ const mutations = {
     // Wipe track data from playlist
     wipePlaylistTrackData(state, playlistId) {
         state.selectedPlaylist.tracks = []
-        let playlistIndex  = state.playlists.findIndex(x => x.playlistId === playlistId)
-        state.playlists[playlistIndex].tracks = []
     },
     pushToPlaylistTrackData(state, data) {
         state.selectedPlaylist.tracks.push(data.track)
-        let playlistIndex  = state.playlists.findIndex(x => x.playlistId === data.playlistId)
-        state.playlists[playlistIndex].tracks.push(data.track)
     }
 }
 
@@ -45,6 +48,7 @@ const actions = {
 
         // lock acount swap
         commit('toggleAccountLock', true)
+        commit('togglePlaylistSelectLock', false)
 
         let config = {
             headers: {
@@ -79,7 +83,7 @@ const actions = {
         }
         axios.get('https://api.spotify.com/v1/me/playlists', config)
         .then((response) => {
-
+            
             // Loop over response playlists 
             for(var i = 0; i < response.data.items.length; i++) {
                 var playlistObject = {
@@ -196,27 +200,66 @@ const actions = {
         })
     },
     savePlaylistsToDb({ dispatch, commit, rootState, state }) {
+
+        function chunkArray(data) {
+            var perChunk = data.chunkSize;
+            var chunkedArray = [];
+            // Chunk tracks array into multiples of 100
+            let result = data.inputArray.reduce((resultArray, item, index) => { 
+                const chunkIndex = Math.floor(index/perChunk)
+                if(!resultArray[chunkIndex]) {
+                    resultArray[chunkIndex] = [] // start a new chunk
+                }
+                resultArray[chunkIndex].push(item)
+                return resultArray
+            }, []);
+            chunkedArray = result
+            return chunkedArray
+        }
+
+        // Save playlists
+        let playlistChunkArray = chunkArray({chunkSize: 20, inputArray: state.playlists})
+        var chunkArrayLength = playlistChunkArray.length;
+        for(var i = 0; i < chunkArrayLength; i++) {
+            let config = {
+                headers: {
+                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
+                    'Authorization': this.$auth.strategy.token.get()
+                }
+            }
+            axios.post(process.env.API_URL + '/playlists', {
+                playlists: playlistChunkArray[i],
+                accountId: rootState.accounts.selectedAccount.accountId,
+                accountType: 'spotify'
+            }, config)
+            .then((response) => {
+                // unlock acount swap
+                commit('toggleAccountLock', false)
+                commit('setMessage', 'Updated playlists!')
+            })
+            .catch((err) => {
+                console.log(err)
+                // unlock acount swap
+                commit('toggleAccountLock', false)
+            })
+        }
+
         let config = {
             headers: {
                 'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
                 'Authorization': this.$auth.strategy.token.get()
             }
         }
-        axios.post(process.env.API_URL + '/playlists/multiple', {
-            playlists: state.playlists,
-            accountId: rootState.accounts.selectedAccount.accountId,
-            accountType: 'spotify'
+        axios.post(process.env.API_URL + '/accounts/updated', {
+            accountId: rootState.accounts.selectedAccount.accountId
         }, config)
         .then((response) => {
-            // unlock acount swap
-            commit('toggleAccountLock', false)
-            commit('setMessage', 'Updated playlists!')
+
         })
         .catch((err) => {
             console.log(err)
-            // unlock acount swap
-            commit('toggleAccountLock', false)
         })
+
     }
 
 }

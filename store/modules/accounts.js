@@ -95,22 +95,25 @@ const actions = {
         })
     },
     updateAccountDb({  }, data) {
-        let config = {
-            headers: {
-                'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                'Authorization': this.$auth.strategy.token.get()
+        return new Promise((resolve, reject) => {
+            let config = {
+                headers: {
+                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
+                    'Authorization': this.$auth.strategy.token.get()
+                }
             }
-        }
-        axios.post(process.env.API_URL + '/accounts/update/tokens', {
-            accessToken: data.accessToken,
-            accountId: data.accountId,
-            accountType: data.accountType
-        }, config)
-        .then((response) => {
-
-        })
-        .catch((err) => {
-            console.log(err)
+            axios.post(process.env.API_URL + '/accounts/update/tokens', {
+                accessToken: data.accessToken,
+                accountId: data.accountId,
+                accountType: data.accountType
+            }, config)
+            .then((response) => {
+                resolve(response)
+            })
+            .catch((err) => {
+                console.log(err)
+                reject(err)
+            })
         })
     }
 }

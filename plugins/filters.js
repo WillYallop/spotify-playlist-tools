@@ -14,5 +14,12 @@ Vue.filter('msToMinAndSec', function (value) {
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 })
 
+Vue.filter('decodeHtml', function (value) {
+    if (!value) return ''
+    var txt = document.createElement("textarea");
+    txt.innerHTML = value;
+    return txt.value;
+})
+
 
 

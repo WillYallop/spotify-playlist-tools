@@ -102,7 +102,13 @@ const actions = {
                     accountId: data.accountId,
                     accountType: 'spotify'
                 })
-                resolve(response)
+                .then((response2) => {
+                    resolve(response)
+                })
+                .catch((err) => {
+                    console.log(err)
+                    reject(err)
+                }) 
             })
             .catch((err) => {
                 console.log(err)

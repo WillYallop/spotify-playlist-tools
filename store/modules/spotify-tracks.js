@@ -41,6 +41,7 @@ const actions = {
                 dispatch('updateTracks', { playlist: data.playlist, refresh: true })
             } else {
                 commit('setTracks', response.data.tracks)
+                commit('setSelectedPlaylistTracks', response.data.playlistTracks)
                 // unlock acount swap
                 commit('toggleAccountLock', false)
                 commit('togglePlaylistSelectLock', false)
@@ -77,7 +78,8 @@ const actions = {
                 commit('pushToPlaylistTrackData', { 
                     track: {
                         id: response.data.items[i].track.id,
-                        addedAt: response.data.items[i].added_at
+                        addedAt: response.data.items[i].added_at,
+                        pos: i + 1
                     },
                     playlistId: data.playlist.playlistId
                 })
@@ -89,7 +91,7 @@ const actions = {
             } else {
                 // Done loading more
                 // Save playlists to db
-                dispatch('saveTracksToDb', { playlist: data.playlist })
+                dispatch('saveTracksToDb', data.playlist)
             }
         })
         .catch((err) => {
@@ -121,7 +123,7 @@ const actions = {
             }
         })
     },
-    loadMoreTracks({ commit, dispatch, rootState }, data) {
+    loadMoreTracks({ commit, dispatch, state, rootState }, data) {
         // Header
         let config = {
             headers: {
@@ -146,7 +148,8 @@ const actions = {
                 commit('pushToPlaylistTrackData', { 
                     track: {
                         id: response.data.items[i].track.id,
-                        addedAt: response.data.items[i].added_at
+                        addedAt: response.data.items[i].added_at,
+                        pos: state.tracks.length
                     },
                     playlistId: data.playlist.playlistId
                 })
@@ -157,7 +160,7 @@ const actions = {
             } else {
                 // Done loading more
                 // Save playlists to db
-                dispatch('saveTracksToDb', { playlist: data.playlist })
+                dispatch('saveTracksToDb', data.playlist)
             }
         })
         .catch((err) => {
@@ -189,32 +192,77 @@ const actions = {
             }
         })
     },
-    saveTracksToDb({ commit, state, rootState }, data) {
-        let config = {
-            headers: {
-                'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                'Authorization': this.$auth.strategy.token.get()
-            }
+    saveTracksToDb({ commit, state, rootState }, playlist) {
+
+        function chunkArray(data) {
+            var perChunk = data.chunkSize;
+            var chunkedArray = [];
+            // Chunk tracks array into multiples of 100
+            let result = data.inputArray.reduce((resultArray, item, index) => { 
+                const chunkIndex = Math.floor(index/perChunk)
+                if(!resultArray[chunkIndex]) {
+                    resultArray[chunkIndex] = [] // start a new chunk
+                }
+                resultArray[chunkIndex].push(item)
+                return resultArray
+            }, []);
+            chunkedArray = result
+            return chunkedArray
         }
-        axios.post(process.env.API_URL + '/tracks/multiple', {
-            tracks: state.tracks,
-            playlistId: data.playlist.playlistId,
-            accountId: rootState.accounts.selectedAccount.accountId,
-            accountType: 'spotify',
-            playlistTrackData: state.playlistTrackData
-        }, config)
-        .then((response) => {
-            // unlock acount swap
-            commit('toggleAccountLock', false)
-            commit('togglePlaylistSelectLock', false)
-            commit('setMessage', 'Updated playlist tracks!')
-        })
-        .catch((err) => {
-            console.log(err)
-            // unlock acount swap
-            commit('toggleAccountLock', false)
-            commit('togglePlaylistSelectLock', false)
-        })
+
+        // Save track data
+        let trackChunkArray = chunkArray({chunkSize: 100, inputArray: state.tracks})
+        var chunkArrayLength = trackChunkArray.length;
+        for(var i = 0; i < chunkArrayLength; i++) {
+            let config = {
+                headers: {
+                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
+                    'Authorization': this.$auth.strategy.token.get()
+                }
+            }
+            axios.post(process.env.API_URL + '/tracks/multiple', {
+                tracks: trackChunkArray[i],
+                accountId: rootState.accounts.selectedAccount.accountId
+            }, config)
+            .then((response) => {
+                // unlock acount swap
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
+
+        // Save playlist track data
+        let playlistTrackChunkArray = chunkArray({chunkSize: 100, inputArray: rootState.spotifyPlaylists.selectedPlaylist.tracks})
+        var playlistChunkArrayLength = playlistTrackChunkArray.length;
+        for(var i = 0; i < playlistChunkArrayLength; i++) {
+            let config = {
+                headers: {
+                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
+                    'Authorization': this.$auth.strategy.token.get()
+                }
+            }
+            axios.post(process.env.API_URL + '/playlists/tracks', {
+                chunk: i + 1,
+                playlistId: playlist.playlistId,
+                accountId: rootState.accounts.selectedAccount.accountId,
+                accountType: 'spotify',
+                playlistTrackData: playlistTrackChunkArray[i]
+            }, config)
+            .then((response) => {
+                // unlock acount swap
+                commit('toggleAccountLock', false)
+                commit('togglePlaylistSelectLock', false)
+                commit('setMessage', 'Updated playlist tracks!')
+            })
+            .catch((err) => {
+                console.log(err)
+                // unlock acount swap
+                commit('toggleAccountLock', false)
+                commit('togglePlaylistSelectLock', false)
+            })
+        }
+
     }
 
 }
