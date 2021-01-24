@@ -6,7 +6,7 @@
                 <p class="playManSubtitleP">Select a playlist you would like to manage!</p>
             </div>
             <div class="breadcrumbCon">
-                <p><nuxt-link to="/dashboard">Dashboard</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link to="/dashboard/spotify/playlists">Playlists</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link to="/dashboard/spotify/playlists/manager">Manager</nuxt-link></p>
+                <p><nuxt-link to="/dashboard">Dashboard</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link to="/dashboard/spotify/manager">Manager</nuxt-link></p>
             </div>
         </div>
     </div>

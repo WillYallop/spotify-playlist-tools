@@ -60,7 +60,7 @@ const actions = {
                 Authorization: 'Bearer ' + rootState.accounts.selectedAccount.accessToken
             }
         }
-        axios.get('https://api.spotify.com/v1/playlists/'+data.playlist.playlistId+'/tracks', config)
+        axios.get('https://api.spotify.com/v1/playlists/'+data.playlist.playlistId+'/tracks/?market='+rootState.accounts.selectedAccount.country, config)
         .then((response) => {
             // Loop over response playlists 
             for(var i = 0; i < response.data.items.length; i++) {
@@ -79,7 +79,8 @@ const actions = {
                     track: {
                         id: response.data.items[i].track.id,
                         addedAt: response.data.items[i].added_at,
-                        pos: i + 1
+                        pos: i + 1, 
+                        available: response.data.items[i].track.is_playable
                     },
                     playlistId: data.playlist.playlistId
                 })
@@ -149,7 +150,8 @@ const actions = {
                     track: {
                         id: response.data.items[i].track.id,
                         addedAt: response.data.items[i].added_at,
-                        pos: state.tracks.length
+                        pos: state.tracks.length,
+                        available: response.data.items[i].track.is_playable
                     },
                     playlistId: data.playlist.playlistId
                 })

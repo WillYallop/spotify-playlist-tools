@@ -1,18 +1,22 @@
 <template>
     <div>
-        <div class="appPageWrapper">
-            <h1>Schedule Playlists</h1>
-        </div>
+        g
     </div>
 </template>
 
 <script>
 export default {
-    layout: 'app',  
+    layout: 'app',
     data() {
         return {
 
         }
+    },
+    mounted() {
+        console.log(this.$router.currentRoute.params.id)
+    },
+    methods: {
+
     }
 }
 </script>

@@ -7,10 +7,10 @@
                         <!-- User Info Section -->
                         <UserInfoSection/>
                         <!-- Navigation -->
-                        <nav class="navLinksCon" v-if="selectedAccount.accountType === 'spotify'">
+                        <nav class="navLinksCon">
                             <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard"><div class="iconCon"><fa class="fas" :icon="['fa', 'tachometer-alt']"/></div>Dashbaord</nuxt-link>
-                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard/spotify/playlists/manager"><div class="iconCon"><fa class="fas" :icon="['fa', 'random']"/></div>Playlist Manager</nuxt-link>
-                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard/spotify/playlists/tracker"><div class="iconCon"><fa class="fas" :icon="['fa', 'redo']"/></div>Track Playlist</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard/spotify/manager"><div class="iconCon"><fa class="fas" :icon="['fa', 'random']"/></div>Playlist Manager</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard/spotify/tracker"><div class="iconCon"><fa class="fas" :icon="['fa', 'redo']"/></div>Track Playlist</nuxt-link>
                             <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard/spotify/schedule/tracks"><div class="iconCon"><fa class="fas" :icon="['fa', 'clone']"/></div>Schedule Tracks</nuxt-link>
                             <nuxt-link @click.native="$store.commit('toggleNav')" class="navLink" to="/dashboard/spotify/schedule/playlists"><div class="iconCon"><fa class="fas" :icon="['fa', 'clone']"/></div>Schedule Playlists</nuxt-link>
                         </nav>

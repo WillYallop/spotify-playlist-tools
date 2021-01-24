@@ -21,24 +21,26 @@
                    </div>
 
                    <!-- Tracks -->
-                   <table class="tracksTable">
-                         <tr class="tableHeader">
-                            <th style="font-size: 14px;">#</th>
-                            <th class="titleCol" style="font-size: 14px;">TITLE</th>
-                            <th class="dateCol" style="font-size: 14px;">DATE</th>
-                            <th style="font-size: 14px;">TIME</th>
-                        </tr>
-                        <tr class="trackRow" :key="track.trackId" v-for="track in orderedTracks">
-                            <td style="font-size: 12px;">{{playlist.tracks.findIndex(x => x.id === track.trackId) + 1}}</td>
-                            <td class="titleCol" style="font-size: 16px;">
-                                {{track.name}}
-                                <br>
-                                <div class="trackArtsitCon"><p class="trackArtistsP" :key="artist.name" v-for="artist in track.artists">{{artist.name}}<span v-if="track.artists.indexOf(artist) != track.artists.length - 1">, </span></p></div>
-                            </td>
-                            <td class="dateCol" style="font-size: 12px;">{{dateAdded(track.trackId)}}</td>
-                            <td style="font-size: 12px;">{{ track.duration | msToMinAndSec }}</td>
-                        </tr>
-                    </table>
+                    <Draggable v-model="tracks" class="trackCon" ghost-class="ghost">
+                        <div class="trackRow" :key="track.trackId" v-for="track in tracks">
+                            <div class="trackRowInner" :class="{ 'unavailableTrack' : isAvailable(track.trackId) }">
+                                <div class="trackCol nameCol">
+                                    {{track.name}}
+                                    <br>
+                                    <div class="trackArtsitCon"><p class="trackArtistsP" :key="artist.name" v-for="artist in track.artists">{{artist.name}}<span v-if="track.artists.indexOf(artist) != track.artists.length - 1">, </span></p></div>
+                                </div>
+                                <div class="rightCol">
+                                    <div class="trackCol dateCol">
+                                        <p class="dateTitleP">Added</p>
+                                        <p class="dateP">{{dateAdded(track.trackId)}}</p>
+                                    </div>
+                                    <div class="trackCol durationCol">
+                                        <p>{{ track.duration | msToMinAndSec }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Draggable>
 
                </div>
             </Simplebar>
@@ -68,8 +70,13 @@ export default {
         playlist() {
             return this.$store.state.spotifyPlaylists.selectedPlaylist
         },
-        tracks() {
-            return this.$store.state.spotifyTracks.tracks
+        tracks: {
+            set(val) {
+                this.$store.commit('setTracks', val)
+            },
+            get() {
+                return this.$store.state.spotifyTracks.tracks
+            }
         },
         hasPlaylist() {
             for(var prop in this.playlist) {
@@ -77,18 +84,8 @@ export default {
                 return true;
             }
             return false;
-        },
-        orderedTracks() {
-            if(this.tracks.length > 0) {
-                var orderedTracks = []
-                for(var i = 0; i < this.playlist.tracks.length; i++) {
-                    let obj = this.tracks.find( x => x.trackId === this.playlist.tracks[i].id )
-                    orderedTracks.push(obj)
-                }
-                return orderedTracks
-            }
-
         }
+
     },
     methods: {
         dateAdded(id) {
@@ -109,6 +106,10 @@ export default {
                 }
             }
         },
+        isAvailable(trackId) {
+            var obj = this.playlist.tracks.find(x => x.id === trackId) 
+            return !obj.available
+        }
 
     }
 }
@@ -156,7 +157,7 @@ export default {
 .playlistHeaderCon {
     width: 100%;
     background-color: #050817;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     padding: 10px;
     display: flex;
     align-items: center;
@@ -207,21 +208,61 @@ export default {
 }
 
 /* Tracks */
-.tracksTable {
+.trackCon {
     width: 100%;
-    border-spacing: 0;
     padding: 0 10px 10px;
 }
-.tableHeader {
-    background-color: #101539;
-    border-radius: 5px;
-    overflow: hidden;
+.trackRow {
+    width: 100%;
+    background: var(--background-3);
 }
-.tracksTable th {
-    text-align: left;
-    font-size: 14px;
-    color: #ACA8A8;
+.unavailableTrack {
+    color: #4B5388;
+}
+.trackRow.ghost {
+  opacity: 1;
+  background: var(--background-3-hover);
+  cursor: pointer;
+}
+.trackRowInner {
+    width: 100%;
+    border-bottom: 1px solid #131A41;
+    display: flex;    
+    align-items: center;
+    justify-content: space-between;
     padding: 5px;
+}
+.trackCol {
+    width: 100%;
+}
+.nameCol {
+    font-size: 14px;
+    padding-right: 10px;
+    font-weight: bold;
+}
+.rightCol {
+    display: flex;
+    align-items: center;
+}
+.dateCol {
+    min-width: 100px;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.dateTitleP {
+    color: #C1BFBF;
+} 
+.unavailableTrack .dateTitleP {
+    color: #4B5388;
+}
+.dateP {
+    font-weight: bold;
+}
+.durationCol {
+    min-width: 40px;
+    font-size: 12px;
 }
 .trackArtsitCon {
     display: flex;
@@ -231,18 +272,10 @@ export default {
     font-size: 14px;
     margin-right: 5px;
     color: #9C9797;
+    font-weight: normal;
 }
-.dateCol {
-    min-width: 100px;
-}
-.trackRow td {
-    border-bottom: 1px solid #131A41 !important;
-    padding: 5px 0;
-}
-.titleCol {
-    padding-left: 10px !important;
-    padding-right: 5px !important;
-    font-size: 14px !important;
+.unavailableTrack .trackArtistsP {
+    color: #4B5388;
 }
 </style>
 
@@ -253,4 +286,16 @@ export default {
 .playlistOuterWrapper .simplebar-scrollbar:before {
   background: #FFF;
 }
+
+.sortable-chosen {
+	opacity: 1 !important;
+    
+}
+.sortable-ghost {
+	opacity: 0 !important;
+}
+.sortable-fallback {
+	opacity: 0 !important;
+}
+
 </style>

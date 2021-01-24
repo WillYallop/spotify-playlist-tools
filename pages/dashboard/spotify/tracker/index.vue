@@ -1,5 +1,5 @@
 <template>
-    <div class="appPageCon">
+    <div>
         <div class="appPageWrapper">
             <h1>Playlist Tracker</h1>
         </div>

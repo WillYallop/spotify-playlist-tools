@@ -1,17 +1,17 @@
 <template>
-    <div class="appPageCon">
+    <div>
 
         <!-- Usage Breakdown -->
         <UsageBreakdown/>
 
         <div class="appPageWrapper">
-            
             <h1>Dashboard</h1>
             <nuxt-link to="/">Home</nuxt-link>
             {{$auth.user}}
             {{$auth.loggedIn}}
             <button v-on:click="test">Test token</button>
         </div>
+
     </div>
 </template>
 

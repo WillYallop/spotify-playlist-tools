@@ -18,6 +18,7 @@ export default {
   plugins: [
     { src: '~/plugins/filters' },
     { src: '~/plugins/vue-closable.js', ssr: false },
+    { src: '~plugins/vue-draggable.js', ssr: false }
   ],
   components: true,
   buildModules: [

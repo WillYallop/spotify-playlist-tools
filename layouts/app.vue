@@ -3,7 +3,9 @@
     <AppHeader/>
     <SiteNavigation/>
     <Message/>
-    <Nuxt/>
+    <div class="appPageCon">
+      <Nuxt/>
+    </div>
   </div>
 </template>
 

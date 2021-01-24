@@ -1,5 +1,5 @@
 <template>
-    <div class="appPageCon">
+    <div>
         <!-- Usage Breakdown -->
         <UsageBreakdown/>
         <!-- Settings Container -->

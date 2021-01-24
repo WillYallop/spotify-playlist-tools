@@ -1,5 +1,5 @@
 <template>
-    <div class="appPageCon">
+    <div>
         <!-- Page Content -->
         <div class="playlistListCon">
             <PlaylistListHeader/>

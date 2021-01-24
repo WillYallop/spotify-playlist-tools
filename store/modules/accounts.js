@@ -53,7 +53,8 @@ const actions = {
             email: data.accountData.email,
             followers: data.accountData.followers.total,
             accountURL: data.accountData.external_urls.spotify,
-            image: data.accountData.images[0].url
+            image: data.accountData.images[0].url,
+            country: data.accountData.country
         }, config)
         .then((response) => {
             // If this is the first load, set the selected account
