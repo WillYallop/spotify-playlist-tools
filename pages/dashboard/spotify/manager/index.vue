@@ -17,7 +17,10 @@
         </div>
         <!-- Playlist Preview -->
         <div class="playlistPreviewCon">
-            <SpotifyPlaylistPreview/>
+            <SpotifyPlaylistPreview
+            :playlist="selectedPlaylist"
+            :tracks="tracks"
+            @update-tracks="updateTracks"/>
         </div>
     </div>
 </template>
@@ -61,7 +64,13 @@ export default {
         },
         playlistSelectLock() {
             return this.$store.state.spotifyPlaylists.playlistSelectLock
-        }
+        },
+        selectedPlaylist() {
+            return this.$store.state.spotifyPlaylists.selectedPlaylist
+        },
+        tracks() {
+            return this.$store.state.spotifyTracks.tracks
+        },
     },
     methods: {
         // Preview Playlist
@@ -71,6 +80,9 @@ export default {
                 playlist: playlist
             })
         },
+        updateTracks(track) {
+            this.$store.commit('setTracks', track)
+        }
 
         
     },

@@ -21,8 +21,8 @@
                    </div>
 
                    <!-- Tracks -->
-                    <Draggable v-model="tracks" class="trackCon" ghost-class="ghost">
-                        <div class="trackRow" :key="track.trackId" v-for="track in tracks">
+                    <Draggable v-model="tracksArray" class="trackCon" ghost-class="ghost">
+                        <div class="trackRow" :key="track.trackId + tracksArray.indexOf(track)" v-for="track in tracksArray">
                             <div class="trackRowInner" :class="{ 'unavailableTrack' : isAvailable(track.trackId) }">
                                 <div class="trackCol nameCol">
                                     {{track.name}}
@@ -62,20 +62,20 @@ export default {
 
         }
     },
-
     components: {
         Simplebar
     },
+    props: {
+        playlist: Object,
+        tracks: Array
+    },
     computed: {
-        playlist() {
-            return this.$store.state.spotifyPlaylists.selectedPlaylist
-        },
-        tracks: {
+        tracksArray: {
             set(val) {
-                this.$store.commit('setTracks', val)
+                this.$emit('update-tracks', val)
             },
             get() {
-                return this.$store.state.spotifyTracks.tracks
+                return this.tracks
             }
         },
         hasPlaylist() {
@@ -217,7 +217,7 @@ export default {
     background: var(--background-3);
 }
 .unavailableTrack {
-    color: #4B5388;
+    color: #60616B;
 }
 .trackRow.ghost {
   opacity: 1;
@@ -255,7 +255,7 @@ export default {
     color: #C1BFBF;
 } 
 .unavailableTrack .dateTitleP {
-    color: #4B5388;
+    color: #60616B;
 }
 .dateP {
     font-weight: bold;
@@ -275,7 +275,7 @@ export default {
     font-weight: normal;
 }
 .unavailableTrack .trackArtistsP {
-    color: #4B5388;
+    color: #60616B;
 }
 </style>
 

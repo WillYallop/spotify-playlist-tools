@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <button class="managePlaylistBtn" v-on:click="$router.push('/dashboard/spotify/playlists/manager/'+playlist.playlistId)"><fa class="fas" :icon="['fa', 'edit']"/></button>
+        <button class="managePlaylistBtn" v-on:click="$router.push('/dashboard/spotify/manager/'+playlist.playlistId)"><fa class="fas" :icon="['fa', 'edit']"/></button>
     </div>
 </template>
 
