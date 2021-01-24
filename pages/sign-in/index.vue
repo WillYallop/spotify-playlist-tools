@@ -27,9 +27,6 @@
 </template>
 
 <script>
-// Libs
-import axios from 'axios'
-
 export default {
     layout: 'auth',
     data() {
@@ -45,18 +42,12 @@ export default {
         if(this.$router.currentRoute.query.googleauth === 'true') {
             this.$auth.fetchUser()
             .then((response) => {
-                let config = {
-                    headers: {
-                        'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                        'Authorization': this.$auth.strategy.token.get()
-                    }
-                }
-                axios.post(process.env.API_URL + '/user/signin/google', {
+                this.$axios.post(process.env.API_URL + '/user/signin/google', {
                     googleId: this.$auth.user.sub,
                     email: this.$auth.user.email,
                     firstName: this.$auth.user.given_name,
                     lastName: this.$auth.user.family_name
-                }, config)
+                })
                 .then((response) => {
                     this.$router.push('/dashboard')
                 })

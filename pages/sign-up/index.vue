@@ -42,9 +42,6 @@
 </template>
 
 <script>
-// Libs
-import axios from 'axios'
-
 export default {
   layout: 'auth',
   data() {
@@ -167,7 +164,7 @@ export default {
       this.emptyFields = []
       if(this.verifyDataHandler()) {
         // Sign up
-        axios.post(process.env.API_URL + '/user/signup', this.credentials)
+        this.$axios.post(process.env.API_URL + '/user/signup', this.credentials)
         .then((res) => {
           //Sign In
           this.$auth.loginWith('local', { 

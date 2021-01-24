@@ -50,13 +50,7 @@ const actions = {
         commit('toggleAccountLock', true)
         commit('togglePlaylistSelectLock', false)
 
-        let config = {
-            headers: {
-                'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                'Authorization': this.$auth.strategy.token.get()
-            }
-        }
-        axios.get(process.env.API_URL + '/playlists/'+rootState.accounts.selectedAccount.accountType+'/'+rootState.accounts.selectedAccount.accountId, config)
+        this.$axios.get(process.env.API_URL + '/playlists/'+rootState.accounts.selectedAccount.accountType+'/'+rootState.accounts.selectedAccount.accountId)
         .then((response) => {
             // Download new playlist data from Spotify API
             // Else - set saved data
@@ -221,17 +215,11 @@ const actions = {
         let playlistChunkArray = chunkArray({chunkSize: 20, inputArray: state.playlists})
         var chunkArrayLength = playlistChunkArray.length;
         for(var i = 0; i < chunkArrayLength; i++) {
-            let config = {
-                headers: {
-                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                    'Authorization': this.$auth.strategy.token.get()
-                }
-            }
-            axios.post(process.env.API_URL + '/playlists', {
+            this.$axios.post(process.env.API_URL + '/playlists', {
                 playlists: playlistChunkArray[i],
                 accountId: rootState.accounts.selectedAccount.accountId,
                 accountType: 'spotify'
-            }, config)
+            })
             .then((response) => {
                 // unlock acount swap
                 commit('toggleAccountLock', false)
@@ -244,15 +232,9 @@ const actions = {
             })
         }
 
-        let config = {
-            headers: {
-                'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                'Authorization': this.$auth.strategy.token.get()
-            }
-        }
-        axios.post(process.env.API_URL + '/accounts/updated', {
+        this.$axios.post(process.env.API_URL + '/accounts/updated', {
             accountId: rootState.accounts.selectedAccount.accountId
-        }, config)
+        })
         .then((response) => {
 
         })

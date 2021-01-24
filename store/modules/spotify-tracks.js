@@ -26,13 +26,7 @@ const actions = {
         commit('toggleAccountLock', true)
         commit('togglePlaylistSelectLock', true)
 
-        let config = {
-            headers: {
-                'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                'Authorization': this.$auth.strategy.token.get()
-            }
-        }
-        axios.get(process.env.API_URL + '/tracks/'+data.playlist.accountType+'/'+data.playlist.playlistId, config)
+        this.$axios.get(process.env.API_URL + '/tracks/'+data.playlist.accountType+'/'+data.playlist.playlistId)
         .then((response) => {
             // Download new playlist tracks from Spotify API
             // Else - set saved data
@@ -216,16 +210,10 @@ const actions = {
         let trackChunkArray = chunkArray({chunkSize: 100, inputArray: state.tracks})
         var chunkArrayLength = trackChunkArray.length;
         for(var i = 0; i < chunkArrayLength; i++) {
-            let config = {
-                headers: {
-                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                    'Authorization': this.$auth.strategy.token.get()
-                }
-            }
-            axios.post(process.env.API_URL + '/tracks/multiple', {
+            this.$axios.post(process.env.API_URL + '/tracks/multiple', {
                 tracks: trackChunkArray[i],
                 accountId: rootState.accounts.selectedAccount.accountId
-            }, config)
+            })
             .then((response) => {
                 // unlock acount swap
             })
@@ -238,19 +226,13 @@ const actions = {
         let playlistTrackChunkArray = chunkArray({chunkSize: 100, inputArray: rootState.spotifyPlaylists.selectedPlaylist.tracks})
         var playlistChunkArrayLength = playlistTrackChunkArray.length;
         for(var i = 0; i < playlistChunkArrayLength; i++) {
-            let config = {
-                headers: {
-                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                    'Authorization': this.$auth.strategy.token.get()
-                }
-            }
-            axios.post(process.env.API_URL + '/playlists/tracks', {
+            this.$axios.post(process.env.API_URL + '/playlists/tracks', {
                 chunk: i + 1,
                 playlistId: playlist.playlistId,
                 accountId: rootState.accounts.selectedAccount.accountId,
                 accountType: 'spotify',
                 playlistTrackData: playlistTrackChunkArray[i]
-            }, config)
+            })
             .then((response) => {
                 // unlock acount swap
                 commit('toggleAccountLock', false)

@@ -43,6 +43,9 @@ export default {
     }],
   ],
   auth: {
+    plugins: [
+      '~/plugins/axios.js'
+    ],
     redirect: {
       login: '/sign-in',
       callback: '/sign-in?googleauth=true',

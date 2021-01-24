@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 const state = () => ({
     user: false
 
@@ -13,13 +11,7 @@ const mutations = {
 
 const actions = {
     getUserData({ commit }) {
-        let config = {
-            headers: {
-                'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                'Authorization': this.$auth.strategy.token.get()
-            }
-        }
-        axios.get(process.env.API_URL + '/user', config)
+        this.$axios.get(process.env.API_URL + '/user')
         .then((response) => {
             commit('setUserData', response.data.data)
         })

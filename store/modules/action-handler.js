@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 const state = () => ({
     actions: false,
     monitorPlaylists: false,
@@ -18,13 +16,7 @@ const mutations = {
 
 const actions = {
     getActions({ commit }) {
-        let config = {
-            headers: {
-                'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                'Authorization': this.$auth.strategy.token.get()
-            }
-        }
-        axios.get(process.env.API_URL + '/user/actions', config)
+        this.$axios.get(process.env.API_URL + '/user/actions')
         .then((response) => {
             let actionInfo = {
                 actions: response.data.actions,

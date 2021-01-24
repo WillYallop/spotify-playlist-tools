@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const state = () => ({
     selectedAccount: false,
     accounts: [],
@@ -37,13 +35,7 @@ const mutations = {
 
 const actions = {
     saveNewAccount({ commit, state }, data) {
-        let config = {
-            headers: {
-                'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                'Authorization': this.$auth.strategy.token.get()
-            }
-        }
-        axios.post(process.env.API_URL + '/accounts', {
+        this.$axios.post(process.env.API_URL + '/accounts', {
             playlists: data.playlistTotal,
             accountId: data.accountData.id,
             accountType: data.accountType,
@@ -55,7 +47,7 @@ const actions = {
             accountURL: data.accountData.external_urls.spotify,
             image: data.accountData.images[0].url,
             country: data.accountData.country
-        }, config)
+        })
         .then((response) => {
             // If this is the first load, set the selected account
             if(state.accounts.length === 0) {
@@ -75,13 +67,7 @@ const actions = {
         })
     },
     getAccounts({ commit, state }) {
-        let config = {
-            headers: {
-                'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                'Authorization': this.$auth.strategy.token.get()
-            }
-        }
-        axios.get(process.env.API_URL + '/accounts', config)
+        this.$axios.get(process.env.API_URL + '/accounts')
         .then((response) => {
             // If this is the first load, set the selected account
             if(state.accounts.length === 0) {
@@ -97,17 +83,11 @@ const actions = {
     },
     updateAccountDb({  }, data) {
         return new Promise((resolve, reject) => {
-            let config = {
-                headers: {
-                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                    'Authorization': this.$auth.strategy.token.get()
-                }
-            }
-            axios.post(process.env.API_URL + '/accounts/update/tokens', {
+            this.$axios.post(process.env.API_URL + '/accounts/update/tokens', {
                 accessToken: data.accessToken,
                 accountId: data.accountId,
                 accountType: data.accountType
-            }, config)
+            },)
             .then((response) => {
                 resolve(response)
             })

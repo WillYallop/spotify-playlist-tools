@@ -28,9 +28,6 @@
 </template>
 
 <script>
-// Libs
-import axios from 'axios'
-
 export default {
     layout: 'app',
     data() {

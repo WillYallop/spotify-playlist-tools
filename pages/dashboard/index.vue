@@ -16,9 +16,6 @@
 </template>
 
 <script>
-// Libs
-import axios from 'axios'
-
 // Components
 import UsageBreakdown from '@/components/global/app/UsageBreakdown'
 
@@ -37,15 +34,9 @@ export default {
             console.log(this.$auth)
         },
         test() {
-            let config = {
-                headers: {
-                    'Auth-Strategy': this.$auth.strategy.name === 'google' ? 'google' : 'local',
-                    'Authorization': this.$auth.strategy.token.get()
-                }
-            }
-            axios.post(process.env.API_URL + '/tracks/delete', {
+            this.$axios.post(process.env.API_URL + '/tracks/delete', {
                 
-            }, config)
+            })
             .then((response) => {
                 console.log(response)
             })
