@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <button class="managePlaylistBtn" v-on:click="$router.push('/dashboard/spotify/manager/'+playlist.playlistId)"><fa class="fas" :icon="['fa', 'edit']"/></button>
+        <button class="managePlaylistBtn" @click.stop="$router.push('/dashboard/spotify/manager/'+playlist.playlistId); wipeClearSelectedPlaylist"><fa class="fas" :icon="['fa', 'edit']"/></button>
     </div>
 </template>
 
@@ -22,6 +22,12 @@ export default {
     },
     props: {
         playlist: Object
+    },
+    methods: {
+        wipeClearSelectedPlaylist() {
+            this.$store.commit('resetSelectedPlaylist')
+            this.$store.commit('resetTracks')
+        }
     }
 }
 </script>
@@ -36,9 +42,14 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
+    transition: 0.2s;
 }
 .spotPlaylistRow:last-child {
     margin-bottom: 0;
+}
+.spotPlaylistRow:hover {
+    background-color: #F9F9F9;
 }
 .leftSideCon {
     display: flex;

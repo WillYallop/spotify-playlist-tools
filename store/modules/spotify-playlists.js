@@ -4,7 +4,10 @@ const state = () => ({
     selectedPlaylist: {},
     playlists: [],
 
-    playlistSelectLock: false
+    playlistSelectLock: false,
+
+
+    playlist: {}
 })
   
 const mutations = {
@@ -38,10 +41,26 @@ const mutations = {
     },
     pushToPlaylistTrackData(state, data) {
         state.selectedPlaylist.tracks.push(data.track)
-    }
+        state.playlist.tracks.push(data.track)
+    },
+
+    // For /manager/:playlistId
+    setSinglePlaylist(state, data) {
+        state.playlist = data
+    },
+    resetSinglePlaylist(state) {
+        this.state.playlist = {}
+    },
+    setSinglePlaylistTracks(state, data) {
+        state.playlist.tracks = data
+    },
+    wipeSinglePlaylistTrackData(state) {
+        state.playlist.tracks = []
+    },
 }
 
 const actions = {
+    // For /manager
     loadPlaylists({ dispatch, commit, rootState }, data) {
         // Reset
         commit('resetPlaylists')
@@ -193,7 +212,7 @@ const actions = {
             }
         })
     },
-    savePlaylistsToDb({ dispatch, commit, rootState, state }) {
+    savePlaylistsToDb({ commit, rootState, state }) {
 
         function chunkArray(data) {
             var perChunk = data.chunkSize;
@@ -242,8 +261,111 @@ const actions = {
             console.log(err)
         })
 
-    }
+    },
+    // For /manage/:playlistId
+    loadSinglePlaylist({ dispatch, commit, rootState }, data) {
+        // lock acount swap
+        commit('toggleAccountLock', true)
 
+        this.$axios.get(process.env.API_URL + '/playlists/single/'+rootState.accounts.selectedAccount.accountType+'/'+rootState.accounts.selectedAccount.accountId+'/'+data.playlistId)
+        .then((response) => {
+            // Download new playlist data from Spotify API
+            // Else - set saved data
+            if(response.data.updatePlaylist) {
+                dispatch('updateSinglePlaylist', { user: data.user, playlistId: data.playlistId, refresh: true })
+            } else {
+                commit('setSinglePlaylist', response.data.playlist)
+                commit('toggleAccountLock', false)
+                dispatch('downloadTracks', {
+                    playlist: {
+                        playlistId: data.playlistId,
+                        accountType: 'spotify'
+                    }
+                })
+            }
+        })
+        .catch((err) => {
+            if(err.response.status != 401) {
+                dispatch('updateSinglePlaylist', { user: data.user, playlistId: data.playlistId, refresh: true })
+            }
+        })
+    },
+    updateSinglePlaylist({ dispatch, commit, rootState }, data) {
+        // Header
+        let config = {
+            headers: {
+                Authorization: 'Bearer ' + rootState.accounts.selectedAccount.accessToken
+            }
+        }
+        axios.get('https://api.spotify.com/v1/playlists/'+data.playlistId+'/?fields=id,name,images,followers,description', config)
+        .then((response) => {
+            
+            var playlistObject = {
+                userId: data.user._id,
+                accountId: rootState.accounts.selectedAccount.accountId,
+                playlistId: response.data.id, 
+                accountType: 'spotify',
+                tracks: [],
+                name: response.data.name,
+                image: response.data.images[0].url,
+                followers: response.data.followers.total,
+                description: response.data.description
+            }
+            commit('setSinglePlaylist', playlistObject)
+            // Save playlists to db
+            dispatch('saveSinglePlaylistToDb')
+        })
+        .catch((err) => {
+            if(err.response.data.error.message === 'The access token expired') {
+                // If token fails retry
+                if(data.refresh) {
+                    dispatch('refreshTokens', {
+                        refreshToken: rootState.accounts.selectedAccount.refreshToken,
+                        accountId: rootState.accounts.selectedAccount.accountId
+                    })
+                    .then((response) => { 
+                        dispatch('updateSinglePlaylist', { refresh: false, user: data.user, playlistId: data.playlistId })
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+                } else {
+                    // It has been attempted twice and still failed
+                    // Show error message
+                    commit('setMessage', 'There was an issue getting playlist data.')
+                    // unlock acount swap
+                    commit('toggleAccountLock', false)
+                }
+            } else {
+                // unlock acount swap
+                commit('toggleAccountLock', false)
+            }
+        })
+    },
+    saveSinglePlaylistToDb({ commit, dispatch, rootState, state }) {
+        this.$axios.post(process.env.API_URL + '/playlists/single', {
+            playlist: state.playlist,
+            accountId: rootState.accounts.selectedAccount.accountId,
+            accountType: 'spotify'
+        })
+        .then((response) => {
+            // unlock acount swap
+            dispatch('downloadTracks', {
+                playlist: {
+                    playlistId: state.playlist.playlistId,
+                    accountType: 'spotify'
+                }
+            })
+            commit('toggleAccountLock', false)
+            commit('setMessage', 'Updated playlist!')
+        })
+        .catch((err) => {
+            console.log(err)
+            // unlock acount swap
+            commit('toggleAccountLock', false)
+        })
+
+    }
 }
 
 export default {

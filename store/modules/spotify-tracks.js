@@ -31,11 +31,13 @@ const actions = {
             // Download new playlist tracks from Spotify API
             // Else - set saved data
             if(response.data.update) {
-                commit('wipePlaylistTrackData', data.playlist.playlistId)
+                commit('wipePlaylistTrackData')
+                commit('wipeSinglePlaylistTrackData')
                 dispatch('updateTracks', { playlist: data.playlist, refresh: true })
             } else {
                 commit('setTracks', response.data.tracks)
                 commit('setSelectedPlaylistTracks', response.data.playlistTracks)
+                commit('setSinglePlaylistTracks', response.data.playlistTracks)
                 // unlock acount swap
                 commit('toggleAccountLock', false)
                 commit('togglePlaylistSelectLock', false)

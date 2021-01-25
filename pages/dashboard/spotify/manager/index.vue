@@ -96,6 +96,10 @@ export default {
                 user: this.user
             })
         }
+    },
+    destroyed() {
+        this.$store.commit('resetSelectedPlaylist')
+        this.$store.commit('resetTracks')
     }
 }
 </script>
