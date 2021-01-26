@@ -80,8 +80,8 @@ export default {
                 playlist: playlist
             })
         },
-        updateTracks(track) {
-            this.$store.commit('setTracks', track)
+        updateTracks(data) {
+            this.$store.commit('setTracks', data.array)
         }
 
         

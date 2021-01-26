@@ -14,14 +14,14 @@
                             </div>
                             <div class="playlistStatsCon">
                                 <p><fa class="fas" :icon="['fa', 'users']"/>200 Followers</p>
-                                <p><fa class="fas" :icon="['fa', 'music']"/>67 Tracks</p>
+                                <p><fa class="fas" :icon="['fa', 'music']"/>{{playlist.tracks.length}} Tracks</p>
                                 <p><fa class="fas" :icon="['fa', 'stopwatch']"/>1h 14m</p>
                             </div>
                        </div>
                    </div>
 
                    <!-- Tracks -->
-                    <Draggable v-model="tracksArray" class="trackCon" ghost-class="ghost">
+                    <Draggable v-model="tracksArray" class="trackCon" ghost-class="ghost" :move="checkMove">
                         <div class="trackRow" :key="track.trackId + tracksArray.indexOf(track)" v-for="track in tracksArray">
                             <div class="trackRowInner" :class="{ 'unavailableTrack' : isAvailable(track.trackId) }">
                                 <div class="trackCol nameCol">
@@ -59,7 +59,7 @@ import Simplebar from 'simplebar-vue'
 export default {
     data() {
         return {
-
+            moveItem: {}
         }
     },
     components: {
@@ -72,7 +72,8 @@ export default {
     computed: {
         tracksArray: {
             set(val) {
-                this.$emit('update-tracks', val)
+                this.moveItem.array = val
+                this.$emit('update-tracks', this.moveItem)
             },
             get() {
                 return this.tracks
@@ -109,6 +110,12 @@ export default {
         isAvailable(trackId) {
             var obj = this.playlist.tracks.find(x => x.id === trackId) 
             return !obj.available
+        },
+        checkMove(evt) {
+            this.moveItem = {
+                fromIndex: evt.draggedContext.index,
+                toIndex: evt.draggedContext.futureIndex
+            }
         }
 
     }

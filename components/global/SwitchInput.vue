@@ -17,14 +17,15 @@ export default {
 .switchCon {
     width: 40px;
     height: 20px;
-    background-color: #D7DFE8;
+    min-width: 40px;
+    background-color: var(--error-text);
     border-radius: 10px;
     position: relative;
     transition: 0.2s;
     cursor: pointer;
 }
 .switchCon:hover {
-    background-color: #D0D9E2;
+    background-color: var(--error-text-hover);
 }
 .switchCon.activeSwitch {
     background-color: var(--accent-2);

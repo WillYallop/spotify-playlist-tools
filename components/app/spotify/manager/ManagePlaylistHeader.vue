@@ -6,11 +6,19 @@
                 <p class="playManSubtitleP">What would you like to do with your playlists?</p>
             </div>
             <div class="breadcrumbCon">
-                <p><nuxt-link to="/dashboard">Dashboard</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link to="/dashboard/spotify/manager">Manager</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link :to="'/dashboard/spotify/manager/'+this.$router.currentRoute.params.id">playlist name</nuxt-link></p>
+                <p><nuxt-link to="/dashboard">Dashboard</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link to="/dashboard/spotify/manager">Manager</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link :to="'/dashboard/spotify/manager/'+this.$router.currentRoute.params.id">{{playlistName}}</nuxt-link></p>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    props: {
+        playlistName: String
+    }
+}
+</script>
 
 <style scoped>
 .playManHead {

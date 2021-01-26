@@ -81,7 +81,7 @@ select {-webkit-appearance: none;}
   --body-text: #606368;
   --non-focused-text: #8C8C8C;
   --error-text: #E94151;
-
+  --error-text-hover: #DF3D4C;
 }
 
 /* Page */

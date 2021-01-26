@@ -3,10 +3,7 @@ import axios from 'axios'
 const state = () => ({
     selectedPlaylist: {},
     playlists: [],
-
     playlistSelectLock: false,
-
-
     playlist: {}
 })
   
@@ -54,9 +51,21 @@ const mutations = {
     setSinglePlaylistTracks(state, data) {
         state.playlist.tracks = data
     },
+    updateSinglePlaylistTrack(state, data) {
+        let fromIndex = data.fromIndex
+        let toIndex = data.toIndex
+
+        if(fromIndex < toIndex) {
+            state.playlist.tracks.splice(toIndex+1, 0, state.playlist.tracks[fromIndex]);
+            state.playlist.tracks.splice(fromIndex, 1);
+        } else {
+            state.playlist.tracks.splice(toIndex, 0, state.playlist.tracks[fromIndex]);
+            state.playlist.tracks.splice(fromIndex+1, 1);
+        }
+    },
     wipeSinglePlaylistTrackData(state) {
         state.playlist.tracks = []
-    },
+    }
 }
 
 const actions = {
