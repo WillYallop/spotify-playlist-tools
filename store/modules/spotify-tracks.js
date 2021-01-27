@@ -61,7 +61,7 @@ const actions = {
             // Loop over response playlists 
             for(var i = 0; i < response.data.items.length; i++) {
                 var track = {
-                    trackId: response.data.items[i].track.id,
+                    trackId: response.data.items[i].track.linked_from ? response.data.items[i].track.linked_from.id : response.data.items[i].track.id,
                     name: response.data.items[i].track.name,
                     popularity: response.data.items[i].track.popularity,
                     artists: response.data.items[i].track.artists,
@@ -73,7 +73,7 @@ const actions = {
                 commit('pushToTracks', track)
                 commit('pushToPlaylistTrackData', { 
                     track: {
-                        id: response.data.items[i].track.id,
+                        id: response.data.items[i].track.linked_from ? response.data.items[i].track.linked_from.id : response.data.items[i].track.id,
                         addedAt: response.data.items[i].added_at,
                         pos: i + 1, 
                         available: response.data.items[i].track.is_playable
@@ -132,7 +132,7 @@ const actions = {
             // Loop over response playlists 
             for(var i = 0; i < response.data.items.length; i++) {
                 var track = {
-                    trackId: response.data.items[i].track.id,
+                    trackId: response.data.items[i].track.linked_from ? response.data.items[i].track.linked_from.id : response.data.items[i].track.id,
                     name: response.data.items[i].track.name,
                     popularity: response.data.items[i].track.popularity,
                     artists: response.data.items[i].track.artists,
@@ -144,7 +144,7 @@ const actions = {
                 commit('pushToTracks', track)
                 commit('pushToPlaylistTrackData', { 
                     track: {
-                        id: response.data.items[i].track.id,
+                        id: response.data.items[i].track.linked_from ? response.data.items[i].track.linked_from.id : response.data.items[i].track.id,
                         addedAt: response.data.items[i].added_at,
                         pos: state.tracks.length,
                         available: response.data.items[i].track.is_playable
