@@ -101,8 +101,8 @@ export default {
             // Page  logic
             allTrackIds: [],
 
-            // Remove duplicates
-            removeDuplicates: false,
+            // Remove duplicates 
+            removeDuplicates: false, 
             duplicatesKey: 1,
             
             // Remove unplayable tracks
@@ -147,22 +147,23 @@ export default {
 
         //
         duplicates() {
-            if(this.duplicatesKey > 0) {
-                if(this.tracks) {
-                    let checkedIds = []
-                    let duplicateIds = []
-                    for(var i = 0; i < this.tracks.length; i++) {
-                        const check = checkedIds.find( x => x === this.tracks[i].trackId)
-                        if(check) {
-                            duplicateIds.push(this.tracks[i])
-                        } else {
-                            checkedIds.push(this.tracks[i].trackId)
+            if(this.playlist.tracks) {
+                let checkedIds = []
+                let duplicateIds = []
+                for(var i = 0; i < this.playlist.tracks.length; i++) {
+                    const check = checkedIds.find( x => x === this.playlist.tracks[i].id)
+                    if(check) {
+                        let trackObj = this.tracks.find( x => x.trackId === this.playlist.tracks[i].id)
+                        if(trackObj) {
+                            duplicateIds.push(trackObj)
                         }
+                    } else {
+                        checkedIds.push(this.playlist.tracks[i].id)
                     }
-                    return duplicateIds
-                } else {
-                    return []
                 }
+                return duplicateIds
+            } else {
+                return []
             }
         },
         showTracks() {
@@ -254,128 +255,216 @@ export default {
                 this.$store.commit('setSinglePlaylistTracks', returnArray)
             }
         },
-        updatePlaylist(refresh) {
-            this.$store.commit('toggleAccountLock', true)
+        // Update playlist
+        // Main actions
+        updatePlaylist() {
+            // Check if we have one of the options selected
+            if(this.reorderPlaylist || this.removeDuplicates || this.removeUnplayable) {
 
-            // Remove all tracks from playlist
-            this.allTrackIds = this.getAllIds()
-            let chunkedArray = this.chunkArray(99, this.allTrackIds)
+                // Toggle account lock
+                this.$store.commit('toggleAccountLock', true)
 
-            // Remove tracks
-            let counter = 0;
-            for(var i = 0; i < chunkedArray.length; i++) {
-                counter++
-                var tracksArray = chunkedArray[i]
-                const trackUrlObjectsArray = []
-
-                // Format track values for URL
-                for(var k = 0; k < tracksArray.length; k++) {
-                    var trackObj = {
-                        uri: 'spotify:track:' + tracksArray[k]
-                    }
-                    trackUrlObjectsArray.push(trackObj)
-                }
-                // Delete playlist tracks
-                axios({
-                    method: 'delete' ,
-                    url: 'https://api.spotify.com/v1/playlists/'+this.$router.currentRoute.params.id+'/tracks',
-                    data: {
-                        tracks: trackUrlObjectsArray
-                    },
-                    headers: {
-                        Authorization: 'Bearer ' + this.selectedAccount.accessToken,
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then((result) => {
-        
-                })
-                .catch((err) => {
-                    if(err.response.data.error.message === 'The access token expired') {
-                        // If token fails retry
-                        if(refresh) {
-                            this.$store.dispatch('refreshTokens', {
-                                refreshToken: this.selectedAccount.refreshToken,
-                                accountId: this.selectedAccount.accountId
-                            })
+                // If we have tracks to remove from duplicates and/or unplayable tracks
+                if(this.removeDuplicates || this.removeUnplayable) {
+                    let removeTracks = this.getRemoveIds()
+                    if(removeTracks.length > 0) {
+                        this.deleteTracks(true, removeTracks, 'remove-only')
+                        .then((response) => {
+                            // Update playlist tracks array
+                            for(var i = 0; i < removeTracks.length; i++) {
+                                let indexOf = this.playlist.tracks.findIndex( x => x.id === removeTracks[i])
+                                this.$store.commit('spliceSingplePlaylistTrack', indexOf)
+                            }
+                            this.newPlaylistTracksArray(this.getAllIds())
                             .then((response) => {
-                                this.updatePlaylist(false)
+                                // Check if we want to re-order the playlist
+                                if(this.reorderPlaylist) {
+                                    let trackIds = this.getAllIds()
+                                    this.deleteTracks(true, trackIds, false)
+                                    .then((response) => {
+                                        // Add tracks back to playlist
+                                        this.addTracks(true, trackIds) 
+                                        .then((response) => {
+                                            // Update playlist tracks array
+                                            this.newPlaylistTracksArray(trackIds)
+                                            .then(() => {
+                                                this.updateDb() // Update db
+                                                this.resetPage() // Reset
+                                            })
+                                        })
+                                    })
+                                } else {
+                                    this.updateDb() // Update db
+                                    this.resetPage() // Reset
+                                }
                             })
-                            .catch((error) => {
-                                console.log(error)
-                            })
-                        }
+                        })
                     }
-                })
-            }
-
-            if(counter === chunkedArray.length) {
-                this.addTracks(true)
+                } else {
+                    let trackIds = this.getAllIds()
+                    this.deleteTracks(true, trackIds, false)
+                    .then((response) => {
+                        // Add tracks back to playlist
+                        this.addTracks(true, trackIds) 
+                        .then((response) => {
+                            // Update playlist tracks array
+                            this.newPlaylistTracksArray(trackIds)
+                            .then(() => {
+                                this.updateDb() // Update db
+                                this.resetPage() // Reset
+                            })
+                        })
+                    })
+                }
             }
         },
-        addTracks(refresh) {
-            // Get a list of all tracks, and takeaway track ids that are in the "removeTrackIds"
-            let removeTrackIds = this.getRemoveIds()
-            for(var i = 0; i < removeTrackIds.length; i++) {
-                let removeIndex = this.allTrackIds.findIndex( x => x === removeTrackIds[i])
-                if(removeIndex > -1) {
-                    this.allTrackIds.splice(removeIndex, 1)
-                }
-            }
+        deleteTracks(refresh, array, type) {
+            return new Promise((resolve, reject) => {
 
-            // Add "allTrackIds" back 
-            var chunkedArray = this.chunkArray(99, this.allTrackIds)
-            let counter = 0;
-            for(var i = 0; i < chunkedArray.length; i++) {
-                counter++
-                var tracksArray = chunkedArray[i]
-                const trackUrlArray = [];
-                // Format track values for URL
-                for(var k = 0; k < tracksArray.length; k++) {
-                    var string = 'spotify:track:' + tracksArray[k]
-                    trackUrlArray.push(string)
-                }
-           
-                // Add playlist track
-                // Headers
-                let header = {
-                    headers: {
-                        Authorization: 'Bearer ' + this.selectedAccount.accessToken, 
-                        'Content-Type': 'application/json' 
-                    }
-                }
-                axios.post('https://api.spotify.com/v1/playlists/'+this.$router.currentRoute.params.id+'/tracks', {
-                    uris: trackUrlArray
-                }, header)
-                .then((res) => {
+                let chunkedArray = this.chunkArray(99, array)
 
-                })
-                .catch((err) => {
-                    if(err.response.data.error.message === 'The access token expired') {
-                        // If token fails retry
-                        if(refresh) {
-                            this.$store.dispatch('refreshTokens', {
-                                refreshToken: this.selectedAccount.refreshToken,
-                                accountId: this.selectedAccount.accountId
-                            })
-                            .then((response) => {
-                                this.addTracks(false)
-                            })
-                            .catch((error) => {
-                                console.log(error)
-                            })
+                let counter = 0;
+                for(var i = 0; i < chunkedArray.length; i++) {
+                    counter++
+                    // format array into array of objects
+                    var tracksArray = chunkedArray[i]
+                    const trackUrlObjectsArray = []
+                    // Format track values for URL
+                    for(var k = 0; k < tracksArray.length; k++) {
+                        if(type === 'remove-only') {
+                            var trackObj = {
+                                uri: 'spotify:track:' + tracksArray[k],
+                                positions: [this.playlist.tracks.findIndex( x => x.id === tracksArray[k])]
+                            }
+                        } else {
+                            var trackObj = {
+                                uri: 'spotify:track:' + tracksArray[k]
+                            }
                         }
+                        trackUrlObjectsArray.push(trackObj)
                     }
-                })
+                    // Delete playlist tracks
+                    axios({
+                        method: 'delete' ,
+                        url: 'https://api.spotify.com/v1/playlists/'+this.$router.currentRoute.params.id+'/tracks',
+                        data: {
+                            tracks: trackUrlObjectsArray
+                        },
+                        headers: {
+                            Authorization: 'Bearer ' + this.selectedAccount.accessToken,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then((result) => {
+                        
+                    })
+                    .catch((err) => {
+                        if(err.response.data.error.message === 'The access token expired') {
+                            // If token fails retry
+                            if(refresh) {
+                                this.$store.dispatch('refreshTokens', {
+                                    refreshToken: this.selectedAccount.refreshToken,
+                                    accountId: this.selectedAccount.accountId
+                                })
+                                .then((response) => {
+                                    this.deleteTracks(false, array, type)
+                                })
+                                .catch((error) => {
+                                    console.log(error)
+                                })
+                            }
+                        }
+                    })
+                }
 
-                // Once we are on the last itterate, wait a second for the last post to complete
-                // Not ideal - but having this in then messes up to to loop not waiting for
                 if(counter === chunkedArray.length) {
-                    // Generate new tracks array for playlist tracks array to upload to db
-                    this.newPlaylistTracks(this.allTrackIds) 
+                    resolve(true)
                 }
+
+            })
+        },
+        addTracks(refresh, array) {
+            return new Promise((resolve, reject) => {
+
+                // Add "allTrackIds" back 
+                var chunkedArray = this.chunkArray(99, array)
+
+                let counter = 0;
+                for(var i = 0; i < chunkedArray.length; i++) {
+                    counter++
+                    var tracksArray = chunkedArray[i]
+                    const trackUrlArray = [];
+                    // Format track values for URL
+                    for(var k = 0; k < tracksArray.length; k++) {
+                        var string = 'spotify:track:' + tracksArray[k]
+                        trackUrlArray.push(string)
+                    }
+                    // Add playlist track
+                    // Headers
+                    let header = {
+                        headers: {
+                            Authorization: 'Bearer ' + this.selectedAccount.accessToken, 
+                            'Content-Type': 'application/json' 
+                        }
+                    }
+                    axios.post('https://api.spotify.com/v1/playlists/'+this.$router.currentRoute.params.id+'/tracks', {
+                        uris: trackUrlArray
+                    }, header)
+                    .then((res) => {
+
+                    })
+                    .catch((err) => {
+                        if(err.response.data.error.message === 'The access token expired') {
+                            // If token fails retry
+                            if(refresh) {
+                                this.$store.dispatch('refreshTokens', {
+                                    refreshToken: this.selectedAccount.refreshToken,
+                                    accountId: this.selectedAccount.accountId
+                                })
+                                .then((response) => {
+                                    this.addTracks(false, array)
+                                })
+                                .catch((error) => {
+                                    console.log(error)
+                                })
+                            }
+                        }
+                    })
+                }
+
+                if(counter === chunkedArray.length) {
+                    resolve(true)
+                }
+
+            })
+        },
+        updateDb() {
+            // Save playlist track data
+            let playlistTrackChunkArray = this.chunkArray(99, this.playlist.tracks)
+            var playlistChunkArrayLength = playlistTrackChunkArray.length
+
+            for(var i = 0; i < playlistChunkArrayLength; i++) {
+                this.$axios.post(process.env.API_URL + '/playlists/tracks', {
+                    chunk: i + 1,
+                    playlistId: this.$router.currentRoute.params.id,
+                    accountId: this.selectedAccount.accountId,
+                    accountType: 'spotify',
+                    playlistTrackData: playlistTrackChunkArray[i]
+                })
+                .then((response) => {
+                    // unlock acount swap
+                    this.$store.commit('toggleAccountLock', false)
+                    this.$store.commit('setMessage', 'Updated playlist tracks!')
+                })
+                .catch((err) => {
+                    console.log(err)
+                    // unlock acount swap
+                    this.$store.commit('toggleAccountLock', false)
+                })
             }
         },
+
+        // Functions
         getAllIds() {
             this.allTrackIds = []
             let idArray = []
@@ -428,53 +517,32 @@ export default {
             chunkedArray = result
             return chunkedArray
         },
-        // Generate new tracks array playlist for db
-        newPlaylistTracks(idArray) {
-            let finalArray = []
-            for(var i = 0; i < idArray.length; i++) {
-                let oldTrackObj = this.playlist.tracks.find( x => x.id === idArray[i])
-                if(oldTrackObj) {
-                    let newTrackObj = {
-                        id: idArray[i],
-                        addedAt:new Date(),
-                        pos: i+1,
-                        available: oldTrackObj.available
+        newPlaylistTracksArray(idArray) {
+            return new Promise((resolve, reject) => {
+                let finalArray = []
+                for(var i = 0; i < idArray.length; i++) {
+                    let oldTrackObj = this.playlist.tracks.find( x => x.id === idArray[i])
+                    if(oldTrackObj) {
+                        let newTrackObj = {
+                            id: idArray[i],
+                            addedAt:new Date(),
+                            pos: i+1,
+                            available: oldTrackObj.available
+                        }
+                        finalArray.push(newTrackObj)
                     }
-                    finalArray.push(newTrackObj)
                 }
-            }
-
-            // Save playlist track data
-            let playlistTrackChunkArray = this.chunkArray(99, finalArray)
-            var playlistChunkArrayLength = playlistTrackChunkArray.length
-            for(var i = 0; i < playlistChunkArrayLength; i++) {
-                this.$axios.post(process.env.API_URL + '/playlists/tracks', {
-                    chunk: i + 1,
-                    playlistId: this.$router.currentRoute.params.id,
-                    accountId: this.selectedAccount.accountId,
-                    accountType: 'spotify',
-                    playlistTrackData: playlistTrackChunkArray[i]
-                })
-                .then((response) => {
-                    // Set track data, reset settings
-                    this.$store.commit('setSinglePlaylistTracks', finalArray)
-                    this.reorderPlaylist = false
-                    this.randomiseOrder = false
-                    this.removeUnplayable = false
-                    this.removeDuplicates = false
-                    this.duplicatesKey++
-
-                    // unlock acount swap
-                    this.$store.commit('toggleAccountLock', false)
-                    this.$store.commit('setMessage', 'Updated playlist tracks!')
-                })
-                .catch((err) => {
-                    console.log(err)
-                    // unlock acount swap
-                    this.$store.commit('toggleAccountLock', false)
-                })
-            }
-        }
+                // Set track data
+                this.$store.commit('setSinglePlaylistTracks', finalArray)
+                resolve(true)
+            })
+        },
+        resetPage() {
+            this.reorderPlaylist = false
+            this.randomiseOrder = false
+            this.removeUnplayable = false
+            this.removeDuplicates = false
+        },
     },
     watch: {
         selectedAccount(val, oldVal) {

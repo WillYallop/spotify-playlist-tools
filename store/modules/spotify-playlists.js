@@ -63,6 +63,9 @@ const mutations = {
             state.playlist.tracks.splice(fromIndex+1, 1);
         }
     },
+    spliceSingplePlaylistTrack(state, index) {
+        state.playlist.tracks.splice(index, 1);
+    },
     wipeSinglePlaylistTrackData(state) {
         state.playlist.tracks = []
     }
