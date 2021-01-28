@@ -88,7 +88,7 @@ const actions = {
         commit('toggleAccountLock', true)
         commit('togglePlaylistSelectLock', false)
 
-        this.$axios.get(process.env.API_URL + '/playlists/'+rootState.accounts.selectedAccount.accountType+'/'+rootState.accounts.selectedAccount.accountId+'/0/15')
+        this.$axios.get(process.env.API_URL + '/playlists/multiple/'+rootState.accounts.selectedAccount.accountType+'/'+rootState.accounts.selectedAccount.accountId+'/0/15')
         .then((response) => {
             // Download new playlist data from Spotify API
             // Else - set saved data
@@ -311,7 +311,7 @@ const actions = {
             if(err.response.status != 401) {
                 dispatch('updateSinglePlaylist', { user: data.user, playlistId: data.playlistId, refresh: true })
             }
-        })
+        })  
     },
     updateSinglePlaylist({ dispatch, commit, rootState }, data) {
         // Header

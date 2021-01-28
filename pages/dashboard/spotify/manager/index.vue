@@ -111,7 +111,7 @@ export default {
         },
         // Load more playlists
         loadMorePlaylists() {
-            this.$axios.get(process.env.API_URL + '/playlists/'+this.selectedAccount.accountType+'/'+this.selectedAccount.accountId+'/'+this.skip+'/'+this.limit)
+            this.$axios.get(process.env.API_URL + '/playlists/multiple/'+this.selectedAccount.accountType+'/'+this.selectedAccount.accountId+'/'+this.skip+'/'+this.limit)
             .then((response) => {
                 if(!response.data.updatePlaylist) {
                     for(var i = 0; i < response.data.playlists.length; i++) {
@@ -234,7 +234,7 @@ export default {
     bottom: 0;
     overflow: hidden;
     border-radius: 10px;
-    opacity: 0.9;
+    opacity: 0.7;
     z-index: 50;
 }
 

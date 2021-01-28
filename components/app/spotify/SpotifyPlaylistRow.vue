@@ -1,5 +1,5 @@
 <template>
-    <div class="spotPlaylistRow"  v-on:click="$emit('preview-playlist', playlist)">
+    <div class="spotPlaylistRow"  v-on:click="$router.push('/dashboard/spotify/manager/'+playlist.playlistId); wipeClearSelectedPlaylist">
         <div class="leftSideCon">
             <img class="playlistImg" :src="playlist.image" :alt="playlist.name">
             <div class="playlistTexarea">
@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <button class="managePlaylistBtn" @click.stop="$router.push('/dashboard/spotify/manager/'+playlist.playlistId); wipeClearSelectedPlaylist"><fa class="fas" :icon="['fa', 'edit']"/></button>
+        <button class="managePlaylistBtn" @click.stop="$emit('preview-playlist', playlist)"><fa class="fas" :icon="['fa', 'music']"/></button>
     </div>
 </template>
 
@@ -80,18 +80,22 @@ export default {
 }
 
 .managePlaylistBtn {
-    height: 30px;
-    width: 30px;
+    height: 35px;
+    width: 35px;
     min-width: 30px;
     border-radius: 50%;
     background-color: var(--accent-2);
     border: none;
     cursor: pointer;
     transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .managePlaylistBtn .fas {
     color: #FFF;
-    font-size: 10px;
+    font-size: 14px;
+    margin-left: -4px;
 }
 .managePlaylistBtn:hover {
     background-color: var(--accent-2-hover);

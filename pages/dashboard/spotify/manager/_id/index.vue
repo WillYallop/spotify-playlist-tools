@@ -780,7 +780,7 @@ export default {
     bottom: 0;
     overflow: hidden;
     border-radius: 10px;
-    opacity: 0.9;
+    opacity: 0.7;
     z-index: 50;
 }
 
