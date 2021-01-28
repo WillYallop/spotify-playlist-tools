@@ -2,7 +2,8 @@
     <div>
         <!-- Page Content -->
         <div class="playlistListCon">
-            <PlaylistListHeader/>
+            <PlaylistListHeader
+            @refresh-playlists="refreshPlaylists"/>
             <div class="playlistListWrapper appPageWrapper">
                 
                 <SpotifyPlaylistRow :key="playlist.playlistId" v-for="playlist in playlists"
@@ -82,9 +83,18 @@ export default {
         },
         updateTracks(data) {
             this.$store.commit('setTracks', data.array)
+        },
+        // Refresh playlists
+        refreshPlaylists() {
+            this.$store.commit('toggleAccountLock', true)
+            this.$store.commit('togglePlaylistSelectLock', true)
+            this.$store.commit('resetPlaylists')
+            this.$store.dispatch('updatePlaylists', {
+                user: this.user,
+                refresh: true
+            })
         }
 
-        
     },
     watch: {
         selectedAccount() {

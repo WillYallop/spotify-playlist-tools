@@ -3,7 +3,8 @@
         <!-- Page Content -->
         <div class="managePlaylistCon">
             <ManagePlaylistHeader
-            :playlistName="playlist.name"/>
+            :playlistName="playlist.name"
+            @refresh-playlist="refreshPlaylist"/>
             <div class="managePlaylistWrapper appPageWrapper">
 
                 <!-- Remove Duplicates -->
@@ -13,7 +14,7 @@
                             <p class="sectTitleP">Remove Duplicates</p>
                             <p class="sectBodyP">You have <span class="boldify">{{duplicates.length}}</span> duplicate tracks in this playlist!</p>
                         </div>
-                        <SwitchInput :boolean="removeDuplicates" @update-boolean="removeDuplicates = $event"/>
+                        <SwitchInput v-if="duplicates.length > 0" :boolean="removeDuplicates" @update-boolean="removeDuplicates = $event"/>
                     </div>
                     <div v-show="removeDuplicates" class="sectionDropdownCon" style="padding-top: 10px;">
                         <SpotifyTrackRow :key="track.trackId + 1" v-for="track in duplicates"
@@ -28,7 +29,7 @@
                             <p class="sectTitleP">Remove Unplayable Tracks</p>
                             <p class="sectBodyP">You have <span class="boldify">{{unplayableTracks.length}}</span> tracks in this playlist that are not available in any countries!</p>
                         </div>
-                        <SwitchInput :boolean="removeUnplayable" @update-boolean="removeUnplayable = $event"/>
+                        <SwitchInput v-if="unplayableTracks.length > 0" :boolean="removeUnplayable" @update-boolean="removeUnplayable = $event"/>
                     </div>
                     <div v-show="removeUnplayable" class="sectionDropdownCon" style="padding-top: 10px;">
                         <SpotifyTrackRow :key="track.trackId + 2" v-for="track in unplayableTracks"
@@ -563,6 +564,26 @@ export default {
             this.removeUnplayable = false
             this.removeDuplicates = false
         },
+
+        // Refresh page
+        refreshPlaylist() {
+            this.$store.commit('toggleAccountLock', true)
+            this.$store.dispatch('updateSinglePlaylist', {  
+                user: this.user,
+                playlistId: this.$router.currentRoute.params.id,
+                refresh: true
+            })
+
+            this.$store.commit('wipePlaylistTrackData')
+            this.$store.commit('wipeSinglePlaylistTrackData')
+            this.$store.dispatch('updateTracks', { 
+                playlist: {
+                    playlistId: this.$router.currentRoute.params.id,
+                    accountType: 'spotify'
+                }, 
+                refresh: true 
+            })
+        }
     },
     watch: {
         selectedAccount(val, oldVal) {

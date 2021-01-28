@@ -4,8 +4,8 @@
             <img class="playlistImg" :src="playlist.image" :alt="playlist.name">
             <div class="playlistTexarea">
                 <div class="playlistNameP">{{playlist.name}}</div>
-                <p class="playlistSubP" v-if="playlist.followers">{{playlist.followers}}</p>
-                <p class="playlistSubP" v-else>followers unknown</p>
+                <p class="playlistSubP" v-if="playlist.followers >= 0">{{playlist.followers}} Followers</p>
+                <p class="playlistSubP" v-else>Followers unknown</p>
             </div>
         </div>
 

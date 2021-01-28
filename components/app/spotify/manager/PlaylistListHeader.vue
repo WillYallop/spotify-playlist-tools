@@ -4,6 +4,8 @@
             <div class="playManTextarea">
                 <h1 class="playManTitle">Manage Your Playlist</h1>
                 <p class="playManSubtitleP">Select a playlist you would like to manage!</p>
+
+                <button class="refreshPlaylist" v-on:click="$emit('refresh-playlists')"><fa class="fas" :icon="['fa', 'sync-alt']"/></button>
             </div>
             <div class="breadcrumbCon">
                 <p><nuxt-link to="/dashboard">Dashboard</nuxt-link><span class="breadcrumbSpacer">»</span><nuxt-link to="/dashboard/spotify/manager">Manager</nuxt-link></p>
@@ -26,6 +28,8 @@
 .playManTextarea {
     width: 100%;
     margin-bottom: 20px;
+    position: relative;
+    padding-right: 60px;
 }
 .playManTitle {
     font-size: 18px;
@@ -55,5 +59,23 @@
     margin: 0 5px;
     color: var(--title-text);
     font-weight: bold;
+}
+
+/* Refresh btn */
+.refreshPlaylist {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--accent-2);
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #FFF;
+}
+.refreshPlaylist:hover {
+    background-color: var(--accent-2-hover);
 }
 </style>

@@ -119,7 +119,6 @@ const actions = {
                     tracks: [],
                     name: response.data.items[i].name,
                     image: response.data.items[i].images[0].url,
-                    followers: 0,
                     description: response.data.items[i].description
                 }
                 commit('pushToPlaylists', playlistObject)
@@ -180,7 +179,6 @@ const actions = {
                     tracks: [],
                     name: response.data.items[i].name,
                     image: response.data.items[i].images[0].url,
-                    followers: 0,
                     description: response.data.items[i].description
                 }
                 commit('pushToPlaylists', playlistObject)
@@ -224,7 +222,7 @@ const actions = {
             }
         })
     },
-    savePlaylistsToDb({ commit, rootState, state }) {
+    savePlaylistsToDb({ commit, dispatch, rootState, state }) {
 
         function chunkArray(data) {
             var perChunk = data.chunkSize;
@@ -254,12 +252,14 @@ const actions = {
             .then((response) => {
                 // unlock acount swap
                 commit('toggleAccountLock', false)
+                commit('togglePlaylistSelectLock', false)
                 commit('setMessage', 'Updated playlists!')
             })
             .catch((err) => {
                 console.log(err)
                 // unlock acount swap
                 commit('toggleAccountLock', false)
+                commit('togglePlaylistSelectLock', false)
             })
         }
 
@@ -267,7 +267,7 @@ const actions = {
             accountId: rootState.accounts.selectedAccount.accountId
         })
         .then((response) => {
-
+            dispatch('loadPlaylists', { user: rootState.user.user })
         })
         .catch((err) => {
             console.log(err)
