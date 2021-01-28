@@ -13,9 +13,10 @@
                                 <p class="playlistDescP">{{ playlist.description | decodeHtml }}</p>
                             </div>
                             <div class="playlistStatsCon">
-                                <p><fa class="fas" :icon="['fa', 'users']"/>200 Followers</p>
+                                <p v-if="playlist.followers >= 0"><fa class="fas" :icon="['fa', 'users']"/>{{playlist.followers}} Followers</p>
+                                <p v-else><fa class="fas" :icon="['fa', 'users']"/>followers unknown</p>
                                 <p><fa class="fas" :icon="['fa', 'music']"/>{{playlist.tracks.length}} Tracks</p>
-                                <p><fa class="fas" :icon="['fa', 'stopwatch']"/>1h 14m</p>
+                                <p><fa class="fas" :icon="['fa', 'stopwatch']"/>{{ totalDuration | convertMs }}</p>
                             </div>
                        </div>
                    </div>
@@ -85,6 +86,15 @@ export default {
                 return true;
             }
             return false;
+        },
+        totalDuration() {
+            if(this.tracks) {
+                var sum = 0
+                for(var i = 0; i < this.tracks.length; i++) {
+                    sum = sum + this.tracks[i].duration
+                }
+                return sum
+            }
         }
 
     },

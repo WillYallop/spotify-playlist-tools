@@ -73,13 +73,24 @@
                 </div>
 
             </div>
+
+
+            <div v-if="playlistSelectLock" class="playlistsLockedCon">
+                <Skeleton :theme="'light'"/>
+            </div>
+
         </div>
         <!-- Playlist Preview -->
         <div class="playlistPreviewCon">
-            <SpotifyPlaylistPreview
+            <SpotifyPlaylistPreview v-if="!tracksUpdating"
             :playlist="playlist"
             :tracks="showTracks"
             @update-tracks="updateTracks"/>
+            <div class="playlistPreviewUpdatingCon" v-else>
+                <div class="skeletonCon">
+                    <Skeleton/>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -93,6 +104,7 @@ import SpotifyPlaylistPreview from '@/components/app/spotify/SpotifyPlaylistPrev
 import ManagePlaylistHeader from '@/components/app/spotify/manager/ManagePlaylistHeader'
 import SwitchInput from '@/components/global/SwitchInput'
 import SpotifyTrackRow from '@/components/app/spotify/SpotifyTrackRow'
+import Skeleton from '@/components/global/Skeleton'
 
 export default {
     layout: 'app',
@@ -100,6 +112,7 @@ export default {
         return {
             // Page  logic
             allTrackIds: [],
+            tracksUpdating: false,
 
             // Remove duplicates 
             removeDuplicates: false, 
@@ -129,7 +142,8 @@ export default {
         SpotifyPlaylistPreview,
         ManagePlaylistHeader,
         SwitchInput,
-        SpotifyTrackRow
+        SpotifyTrackRow,
+        Skeleton
     },
     computed: {
         selectedAccount() {
@@ -143,6 +157,9 @@ export default {
         },
         tracks() {
             return this.$store.state.spotifyTracks.tracks
+        },
+        playlistSelectLock() {
+            return this.$store.state.spotifyPlaylists.playlistSelectLock
         },
 
         //
@@ -263,6 +280,7 @@ export default {
 
                 // Toggle account lock
                 this.$store.commit('toggleAccountLock', true)
+                this.tracksUpdating = true
 
                 // If we have tracks to remove from duplicates and/or unplayable tracks
                 if(this.removeDuplicates || this.removeUnplayable) {
@@ -454,12 +472,14 @@ export default {
                 .then((response) => {
                     // unlock acount swap
                     this.$store.commit('toggleAccountLock', false)
+                    this.tracksUpdating = false
                     this.$store.commit('setMessage', 'Updated playlist tracks!')
                 })
                 .catch((err) => {
                     console.log(err)
                     // unlock acount swap
                     this.$store.commit('toggleAccountLock', false)
+                    this.tracksUpdating = false
                 })
             }
         },
@@ -673,5 +693,30 @@ export default {
     border-radius: 10px;
     overflow: hidden;
     z-index: 100;
+}
+.playlistPreviewUpdatingCon {
+    height: 100%;
+    width: 100%;
+    background-color: var(--background-3);
+    padding: 20px;
+}
+.skeletonCon {
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Playlist select lock */
+.playlistsLockedCon {
+    position: fixed;
+    top: 0;
+    right:0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    opacity: 0.9;
+    z-index: 50;
 }
 </style>

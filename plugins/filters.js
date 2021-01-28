@@ -21,5 +21,19 @@ Vue.filter('decodeHtml', function (value) {
     return txt.value;
 })
 
+Vue.filter('convertMs', function (miliseconds) {
+    if (!miliseconds) return ''
 
+    var hours, minutes, seconds, total_hours, total_minutes, total_seconds;
+  
+    total_seconds = parseInt(Math.floor(miliseconds / 1000));
+    total_minutes = parseInt(Math.floor(total_seconds / 60));
+    total_hours = parseInt(Math.floor(total_minutes / 60));
+  
+    seconds = parseInt(total_seconds % 60);
+    minutes = parseInt(total_minutes % 60);
+    hours = parseInt(total_hours);
+
+    return `${hours}h ${minutes}m ${seconds}s`
+})
 
