@@ -45,11 +45,11 @@ export default {
     cursor: pointer;
     transition: 0.2s;
 }
-.spotPlaylistRow:last-child {
-    margin-bottom: 0;
-}
 .spotPlaylistRow:hover {
     background-color: #F9F9F9;
+}
+.spotPlaylistRow:last-child  {
+    margin-bottom: 0;
 }
 .leftSideCon {
     display: flex;

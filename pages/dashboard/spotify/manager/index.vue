@@ -6,10 +6,14 @@
             @refresh-playlists="refreshPlaylists"
             @toggle-playlist-preview="togglePlaylistPreview = !togglePlaylistPreview"/>
             <div class="playlistListWrapper appPageWrapper">
-                
-                <SpotifyPlaylistRow :key="playlist.playlistId" v-for="playlist in playlists"
-                :playlist="playlist"
-                @preview-playlist="previewPlaylist"/>
+
+                <div class="playlistCon">
+                    <SpotifyPlaylistRow :key="playlist.playlistId" v-for="playlist in playlists"
+                    :playlist="playlist"
+                    @preview-playlist="previewPlaylist"/>
+                </div>
+            
+                <button class="loadMoreBtn" v-on:click="loadMorePlaylists" v-if="playlists.length >= this.skip">Load More</button>
 
             </div>
 
@@ -44,7 +48,9 @@ export default {
     layout: 'app',  
     data() {
         return {
-            togglePlaylistPreview: false
+            togglePlaylistPreview: false,
+            skip: 15,
+            limit: 15
 
         }
     },
@@ -102,8 +108,22 @@ export default {
                 user: this.user,
                 refresh: true
             })
-        }
-
+        },
+        // Load more playlists
+        loadMorePlaylists() {
+            this.$axios.get(process.env.API_URL + '/playlists/'+this.selectedAccount.accountType+'/'+this.selectedAccount.accountId+'/'+this.skip+'/'+this.limit)
+            .then((response) => {
+                if(!response.data.updatePlaylist) {
+                    for(var i = 0; i < response.data.playlists.length; i++) {
+                        this.$store.commit('pushToPlaylists', response.data.playlists[i])
+                    }
+                }
+                this.skip = this.skip + this.limit
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        },
     },
     watch: {
         selectedAccount() {
@@ -134,6 +154,28 @@ export default {
     margin-top: -40px;
     z-index: 10;
     position: relative;
+}
+
+/* Playlist */
+.playlistCon {
+    width: 100%;
+}
+
+/* Load more btn */
+.loadMoreBtn {
+    margin-top: 10px;
+    padding: 10px 40px;
+    background-color: var(--accent-2);
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFF;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.loadMoreBtn:hover {
+    background-color: var(--accent-2-hover);
 }
 
 /* Playlist Preview */
