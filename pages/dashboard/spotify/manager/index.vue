@@ -3,7 +3,8 @@
         <!-- Page Content -->
         <div class="playlistListCon">
             <PlaylistListHeader
-            @refresh-playlists="refreshPlaylists"/>
+            @refresh-playlists="refreshPlaylists"
+            @toggle-playlist-preview="togglePlaylistPreview = !togglePlaylistPreview"/>
             <div class="playlistListWrapper appPageWrapper">
                 
                 <SpotifyPlaylistRow :key="playlist.playlistId" v-for="playlist in playlists"
@@ -17,12 +18,18 @@
             </div>
         </div>
         <!-- Playlist Preview -->
-        <div class="playlistPreviewCon">
-            <SpotifyPlaylistPreview
-            :playlist="selectedPlaylist"
-            :tracks="tracks"
-            @update-tracks="updateTracks"/>
+        <div class="playlistPreviewCon" :class="{ 'mobActive' : togglePlaylistPreview }">
+            <div class="mobilePlaylistHeader">
+                <button class="closePlaylistBtn" v-on:click="togglePlaylistPreview = !togglePlaylistPreview">close</button>
+            </div>
+            <div class="playlistPreviewWrapper">
+                <SpotifyPlaylistPreview
+                :playlist="selectedPlaylist"
+                :tracks="tracks"
+                @update-tracks="updateTracks"/>
+            </div>
         </div>
+        <div v-on:click="togglePlaylistPreview = !togglePlaylistPreview" class="playlistOverlayBg" :class="{ 'bgActive' : togglePlaylistPreview }"></div>
     </div>
 </template>
 
@@ -37,6 +44,7 @@ export default {
     layout: 'app',  
     data() {
         return {
+            togglePlaylistPreview: false
 
         }
     },
@@ -80,6 +88,7 @@ export default {
             this.$store.dispatch('downloadTracks', {
                 playlist: playlist
             })
+            this.togglePlaylistPreview = !this.togglePlaylistPreview
         },
         updateTracks(data) {
             this.$store.commit('setTracks', data.array)
@@ -119,6 +128,7 @@ export default {
 .playlistListCon {
     padding-right: 610px;
     position: relative;
+    overflow: hidden;
 }
 .playlistListWrapper {
     margin-top: -40px;
@@ -136,6 +146,41 @@ export default {
     border-radius: 10px;
     overflow: hidden;
     z-index: 100;
+
+}
+.playlistPreviewWrapper {
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.mobilePlaylistHeader {
+    width: 100%;
+    display: none;
+    height: 40px;
+}
+.closePlaylistBtn {
+    background-color: none;
+    margin: auto;
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.playlistOverlayBg {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 90;
+    pointer-events: none;
 }
 
 /* Playlist select lock */
@@ -149,5 +194,18 @@ export default {
     border-radius: 10px;
     opacity: 0.9;
     z-index: 50;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 1500px) {
+    .playlistPreviewCon {right: 10px; left: 360px; width: auto; top: 100%; bottom: -100%; transition: 0.2s; background-color: #FFF; border-radius: 20px 20px 0 0; padding: 0 5px 5px;}
+    .playlistPreviewCon.mobActive {bottom: 0; top: 140px;}
+    .playlistPreviewWrapper { height: calc(100% - 40px); }
+    .mobActive .mobilePlaylistHeader {display: flex;}
+    .playlistListCon {padding-right: 0;}
+    .playlistOverlayBg.bgActive {display: flex; pointer-events: all;}
+}
+@media only screen and (max-width: 1024px) {
+    .playlistPreviewCon {left: 10px;}
 }
 </style>

@@ -3,6 +3,7 @@ import axios from 'axios'
 const state = () => ({
     selectedPlaylist: {},
     playlists: [],
+    updatedPlaylists: [],
     playlistSelectLock: false,
     playlist: {}
 })
@@ -13,6 +14,12 @@ const mutations = {
     },
     pushToPlaylists(state, data) {
         state.playlists.push(data)
+    },
+    pushToUpdatedPlaylists(state, data) {
+        state.updatedPlaylists.push(data)
+    },
+    resetUpdatedPlaylists(state) {
+        state.updatedPlaylists = []
     },
     resetPlaylists(state) {
         state.playlists = []
@@ -100,6 +107,9 @@ const actions = {
         })
     },
     updatePlaylists({ dispatch, commit, rootState }, data) {
+
+        commit('resetUpdatedPlaylists')
+
         // Header
         let config = {
             headers: {
@@ -121,7 +131,7 @@ const actions = {
                     image: response.data.items[i].images[0].url,
                     description: response.data.items[i].description
                 }
-                commit('pushToPlaylists', playlistObject)
+                commit('pushToUpdatedPlaylists', playlistObject)
             }
 
             if(response.data.next) {
@@ -181,7 +191,7 @@ const actions = {
                     image: response.data.items[i].images[0].url,
                     description: response.data.items[i].description
                 }
-                commit('pushToPlaylists', playlistObject)
+                commit('pushToUpdatedPlaylists', playlistObject)
             }
 
             if(response.data.next) {
@@ -241,7 +251,7 @@ const actions = {
         }
 
         // Save playlists
-        let playlistChunkArray = chunkArray({chunkSize: 20, inputArray: state.playlists})
+        let playlistChunkArray = chunkArray({chunkSize: 20, inputArray: state.updatedPlaylists})
         var chunkArrayLength = playlistChunkArray.length;
         for(var i = 0; i < chunkArrayLength; i++) {
             this.$axios.post(process.env.API_URL + '/playlists', {
