@@ -41,7 +41,7 @@ body {
   -webkit-text-size-adjust: 100%;
   min-height: 100%;
   height: 100%;
-  background-color: var(--background-2);
+  background-color: #F9FBFD;
 }
 
 textarea {font-family: 'Montserrat', sans-serif !important;}

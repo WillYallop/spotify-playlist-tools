@@ -11,12 +11,12 @@
         <Features/>
       </div>
 
-      <!-- -->
+      <!-- Pricing Section -->
       <div class="compSectCon">
         <CompSectTitle
         :title="'Our Pricing'"
         :body="'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis aliquam neque. Pellentesque tellus justo, laoreet vestibulum neque quis, dignissim interdum nunc.'"/>
-
+        <PricingTables/>
       </div>
 
       <!-- -->
@@ -43,6 +43,7 @@
 import Banner from '@/components/frontend/index/Banner'
 import CompSectTitle from '@/components/frontend/index/CompSectTitle'
 import Features from '@/components/frontend/index/Features'
+import PricingTables from '@/components/frontend/index/PricingTables'
 
 export default {
   middleware: 'guest-only',
@@ -54,7 +55,8 @@ export default {
   components: {
     Banner,
     CompSectTitle,
-    Features
+    Features,
+    PricingTables
   }
 }
 </script>
@@ -68,5 +70,10 @@ export default {
 }
 .compSectCon {
   padding: 150px 0;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 1024px) {
+  .compSectCon {padding: 150px 0 0;}
 }
 </style>

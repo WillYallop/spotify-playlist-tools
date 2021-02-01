@@ -33,7 +33,7 @@ export default {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars', 'faHome','faUnlockAlt', 'faEye', 'faEyeSlash', 'faTrash', 'faTimes', 'faCheck', 'faEdit', 'faUsers', 'faMusic', 'faStopwatch', 'faSyncAlt']
+          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars', 'faHome','faUnlockAlt', 'faEye', 'faEyeSlash', 'faTrash', 'faTimes', 'faCheck', 'faEdit', 'faUsers', 'faMusic', 'faStopwatch', 'faSyncAlt', 'faCheckCircle']
         },
         {
           set: '@fortawesome/free-brands-svg-icons',
