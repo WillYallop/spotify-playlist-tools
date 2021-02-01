@@ -1,5 +1,7 @@
 <template>
-  <div class="pageCon">
+  <div>
+    <Banner/>
+
     <div class="pageWrapper">
       
       <h1>Home</h1>
@@ -10,12 +12,17 @@
 </template>
 
 <script>
+import Banner from '@/components/frontend/index/Banner'
+
 export default {
   middleware: 'guest-only',
   data() {
     return {
 
     }
+  },
+  components: {
+    Banner
   }
 }
 </script>

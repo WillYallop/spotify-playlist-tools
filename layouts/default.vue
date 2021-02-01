@@ -68,6 +68,7 @@ select {-webkit-appearance: none;}
   --background-2: #FFF;
   --background-3: #0A0E27;
   --background-3-hover: #050817;
+  --background-4: #E8F1FF;
 
   --border: #DCE6F1;
 
