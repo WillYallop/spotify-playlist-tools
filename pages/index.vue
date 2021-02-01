@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="indexCon">
     <Banner/>
     <div class="pageWrapper">
       
@@ -60,6 +60,9 @@ export default {
 </script>
 
 <style scoped>
+.indexCon {
+  overflow: hidden;
+}
 .pageWrapper {
   padding: 0 20px;
 }
