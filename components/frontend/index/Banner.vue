@@ -23,7 +23,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 60px 20px 0;
+    padding: 80px 20px 0;
     position: relative;
     margin-bottom: 40px;
 }

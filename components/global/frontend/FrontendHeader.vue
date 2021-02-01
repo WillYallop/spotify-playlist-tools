@@ -1,5 +1,5 @@
 <template>
-  <div class="headerCon">
+  <div class="headerCon" :class="{ 'scrolled' : scrolled > 50 }">
     <div class="headerWrapper pageWrapper">
       <div class="leftSide">
         <nuxt-link class="siteLogo" to="/"><img src="../../../assets/images/logo.png" class="siteLogo"></nuxt-link>
@@ -27,12 +27,25 @@
 export default {
   data() {
     return {
-
+      scrolled: 0
     }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.listenToScroll)
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.listenToScroll)
   },
   computed: {
 
   },
+  methods: {
+    listenToScroll() {
+      var winScroll = document.body.scrollTop || document.documentElement.scrollTop        
+      this.scrolled = winScroll
+    },
+
+  }
 }
 </script>
 
@@ -42,8 +55,14 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 80px;
   z-index: 1000;
+  transition: 0.2s;
+}
+.headerCon.scrolled {
+  height: 60px;
+  background-color: #FFF;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.03);
 }
 .headerWrapper {
   width: 100%;
