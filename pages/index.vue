@@ -24,7 +24,7 @@
         <CompSectTitle
         :title="'What are clients have to say'"
         :body="'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis aliquam neque. Pellentesque tellus justo, laoreet vestibulum neque quis, dignissim interdum nunc.'"/>
-
+        <Testimonials/>
       </div>
 
       <!-- -->
@@ -44,6 +44,7 @@ import Banner from '@/components/frontend/index/Banner'
 import CompSectTitle from '@/components/frontend/index/CompSectTitle'
 import Features from '@/components/frontend/index/Features'
 import PricingTables from '@/components/frontend/index/PricingTables'
+import Testimonials from '@/components/global/frontend/Testimonials'
 
 export default {
   middleware: 'guest-only',
@@ -56,7 +57,8 @@ export default {
     Banner,
     CompSectTitle,
     Features,
-    PricingTables
+    PricingTables,
+    Testimonials
   }
 }
 </script>
