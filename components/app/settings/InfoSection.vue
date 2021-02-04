@@ -40,6 +40,7 @@ export default {
 .sectTitleConP {
     font-size: 14px;
     font-weight: bold;
+    color: var(--title-text);
 }
 .infoUl {
     padding: 0;

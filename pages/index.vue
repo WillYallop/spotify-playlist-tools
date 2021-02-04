@@ -51,6 +51,7 @@ import ContactForm from '@/components/frontend/index/ContactForm'
 import FrontendFooter from '@/components/global/frontend/FrontendFooter'
 
 export default {
+  colorMode: 'light',
   middleware: 'guest-only',
   data() {
     return {

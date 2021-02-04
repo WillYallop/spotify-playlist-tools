@@ -189,6 +189,7 @@ export default {
 .spotifyUsername {
     font-size: 14px;
     font-weight: bold;
+    color: var(--title-text);
 }
 .spotifyInfoPCon {
     display: flex;
@@ -197,6 +198,7 @@ export default {
     font-size: 14px;
     margin-right: 10px;
     margin-top: 2px;
+    color: var(--title-text);
 }
 
 /* Account swap lock */

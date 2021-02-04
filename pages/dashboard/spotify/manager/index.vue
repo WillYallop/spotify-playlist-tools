@@ -212,6 +212,7 @@ export default {
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
+    color: var(--title-text);
 }
 .playlistOverlayBg {
     display: none;
@@ -240,7 +241,7 @@ export default {
 
 /* Media Queries */
 @media only screen and (max-width: 1500px) {
-    .playlistPreviewCon {right: 10px; left: 360px; width: auto; top: 100%; bottom: -100%; transition: 0.2s; background-color: #FFF; border-radius: 20px 20px 0 0; padding: 0 5px 5px;}
+    .playlistPreviewCon {right: 10px; left: 360px; width: auto; top: 100%; bottom: -100%; transition: 0.2s; background-color: var(--background-2); border-radius: 20px 20px 0 0; padding: 0 5px 5px;}
     .playlistPreviewCon.mobActive {bottom: 0; top: 140px;}
     .playlistPreviewWrapper { height: calc(100% - 40px); }
     .mobActive .mobilePlaylistHeader {display: flex;}

@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  middleware: 'guest-only'
+  middleware: 'guest-only',
 }
 </script>
 

@@ -7,9 +7,7 @@
         <div class="appPageWrapper">
             <h1>Dashboard</h1>
             <nuxt-link to="/">Home</nuxt-link>
-            {{$auth.user}}
-            {{$auth.loggedIn}}
-            <button v-on:click="test">Test token</button>
+            <button v-on:click="test">Delete Tracks</button>
         </div>
 
     </div>

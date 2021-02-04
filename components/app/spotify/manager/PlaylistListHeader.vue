@@ -18,7 +18,7 @@
 <style scoped>
 .playManHead {
     border-radius: 0 0 20px 20px;
-    background-color: #D7DFE8;
+    background-color: var(--background-5);
     width: calc(100% + 610px);
     position: relative;
     z-index: 0;

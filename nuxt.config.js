@@ -23,7 +23,8 @@ export default {
   ],
   components: true,
   buildModules: [
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/color-mode'
   ],
   modules: [
     '@nuxtjs/axios',
@@ -34,7 +35,7 @@ export default {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars', 'faHome','faUnlockAlt', 'faEye', 'faEyeSlash', 'faTrash', 'faTimes', 'faCheck', 'faEdit', 'faUsers', 'faMusic', 'faStopwatch', 'faSyncAlt', 'faCheckCircle', 'faEnvelope']
+          icons: ['faTachometerAlt', 'faRandom', 'faRedo', 'faClone', 'faSearch', 'faEllipsisH', 'faCog', 'faBars', 'faHome','faUnlockAlt', 'faEye', 'faEyeSlash', 'faTrash', 'faTimes', 'faCheck', 'faEdit', 'faUsers', 'faMusic', 'faStopwatch', 'faSyncAlt', 'faCheckCircle', 'faEnvelope', 'faMoon', 'faSun']
         },
         {
           set: '@fortawesome/free-brands-svg-icons',
@@ -71,6 +72,16 @@ export default {
         codeChallengeMethod: ''
       },
     }
+  },
+  colorMode: {
+    preference: 'system', // default value of $colorMode.preference
+    fallback: 'light', // fallback value if not system preference found
+    hid: 'nuxt-color-mode-script',
+    globalName: '__NUXT_COLOR_MODE__',
+    componentName: 'ColorScheme',
+    classPrefix: '',
+    classSuffix: '-mode',
+    storageKey: 'nuxt-color-mode'
   },
   axios: {
     baseURL: 'https://playlist-tools-api.herokuapp.com/v1'

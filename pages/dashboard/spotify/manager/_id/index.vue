@@ -260,7 +260,7 @@ export default {
             } 
             // Randomise order
             else { 
-                let array = this.tracks
+                let array = this.playlist.tracks
                 var currentIndex = array.length, temporaryValue, randomIndex;
                 // While there remain elements to shuffle...
                 while (0 !== currentIndex) {
@@ -275,11 +275,9 @@ export default {
                 let trackArray = array
                 let returnArray = []
                 for(var i = 0; i < trackArray.length; i++) {
-                    let trackObj = this.playlist.tracks.find( x => x.id === trackArray[i].trackId)
-                    if(trackObj) {
-                        returnArray.push(trackObj)
-                    }
+                    returnArray.push(trackArray[i])
                 }
+                console.log(returnArray)
                 this.$store.commit('setSinglePlaylistTracks', returnArray)
             }
         },
@@ -686,7 +684,7 @@ export default {
     height: 40px;
     width: 100%;
     max-width: 300px;
-    background-color: #FDFDFD;
+    background-color: var(--input-bg);
     border: none;
     border-radius: 5px;
     padding: 0 10px;
@@ -746,6 +744,7 @@ export default {
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
+    color: var(--title-text);
 }
 .playlistOverlayBg {
     display: none;
@@ -787,7 +786,7 @@ export default {
 
 /* Media Queries */
 @media only screen and (max-width: 1500px) {
-    .playlistPreviewCon {right: 10px; left: 360px; width: auto; top: 100%; bottom: -100%; transition: 0.2s; background-color: #FFF; border-radius: 20px 20px 0 0; padding: 0 5px 5px;}
+    .playlistPreviewCon {right: 10px; left: 360px; width: auto; top: 100%; bottom: -100%; transition: 0.2s; background-color: var(--background-2); border-radius: 20px 20px 0 0; padding: 0 5px 5px;}
     .playlistPreviewCon.mobActive {bottom: 0; top: 140px;}
     .playlistPreviewWrapper { height: calc(100% - 40px); }
     .mobActive .mobilePlaylistHeader {display: flex;}

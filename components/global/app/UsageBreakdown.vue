@@ -56,7 +56,7 @@ export default {
 <style scoped>
 .breakdownCon {
     border-radius: 0 0 20px 20px;
-    background-color: #D7DFE8;
+    background-color: var(--background-5);
     padding: 20px 20px 40px;
     position: relative;
     z-index: 0;
@@ -89,6 +89,7 @@ export default {
 }
 .usageP {
     font-size: 16px;
+    color: var(--title-text);
 }
 
 /* Account Type Btn */

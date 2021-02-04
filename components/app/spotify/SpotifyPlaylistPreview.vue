@@ -179,6 +179,9 @@ export default {
     display: flex;
     align-items: center;
 } 
+.dark-mode .playlistHeaderCon {
+    background-color: var(--background-3-hover);
+}
 .headTopRow {
     display: flex;
     flex-wrap: wrap;
@@ -215,6 +218,10 @@ export default {
     margin: 5px 0 0 10px;
     padding: 5px 0;
 }
+.dark-mode .playlistStatsCon {
+    border-top: 1px solid #182164;
+    border-bottom: 1px solid #182164;
+}
 .playlistStatsCon p {
     font-size: 14px;
     margin-right: 10px;
@@ -248,6 +255,9 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: 5px;
+}
+.dark-mode .trackRowInner {
+    border-bottom: 1px solid var(--background-3-hover);
 }
 .trackCol {
     width: 100%;

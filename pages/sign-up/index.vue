@@ -44,6 +44,7 @@
 <script>
 export default {
   layout: 'auth',
+  colorMode: 'light',
   data() {
     return {
       credentials: {

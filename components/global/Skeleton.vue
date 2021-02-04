@@ -50,11 +50,20 @@ export default {
 }
 
 .lightTheme {
-    background-color: #EAEFF5;
+  background-color: #EAEFF5;
 }
 .lightTheme::after {
-    transform: translateX(-100%);
-    background-image: linear-gradient(90deg, rgba(194, 204, 214, 0) 0, rgba(194, 204, 214, 0.2) 20%, rgba(194, 204, 214, 0.5) 60%, rgba(194, 204, 214, 0));
-    animation: shimmer 2s infinite;
+  transform: translateX(-100%);
+  background-image: linear-gradient(90deg, rgba(194, 204, 214, 0) 0, rgba(194, 204, 214, 0.2) 20%, rgba(194, 204, 214, 0.5) 60%, rgba(194, 204, 214, 0));
+  animation: shimmer 2s infinite;
+}
+
+.dark-mode .lightTheme {
+  background-color: #121416;
+}
+.dark-mode .lightTheme::after {
+  transform: translateX(-100%);
+  background-image: linear-gradient(90deg, rgba(43, 44, 49, 0) 0, rgba(43, 44, 49, 0.2) 20%, rgba(43, 44, 49, 0.5) 60%, rgba(43, 44, 49, 0));
+  animation: shimmer 2s infinite;
 }
 </style>

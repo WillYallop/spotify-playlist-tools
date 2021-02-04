@@ -2,9 +2,11 @@
   <div class="headerCon">
     <div class="headerWrapper appPageWrapper">
       <div class="leftSide">
-        <nuxt-link class="siteLogo" to="/dashboard"><img src="../../../assets/images/logo.png" class="siteLogo"></nuxt-link>
+        <nuxt-link v-if="$colorMode.value != 'dark'" class="siteLogo" to="/dashboard"><img src="../../../assets/images/logo.png" class="siteLogo"></nuxt-link>
+        <nuxt-link v-else class="siteLogo" to="/dashboard"><img src="../../../assets/images/logoWhite.png" class="siteLogo"></nuxt-link>
       </div>
       <div class="rightSide">
+        <button class="darkModeBtn" v-on:click="toggleDarkMode"><fa v-if="$colorMode.value === 'light'" class="fas" :icon="['fa', 'moon']"/><fa v-else class="fas" :icon="['fa', 'sun']"/></button>
         <button class="settingsBtn" v-on:click="$router.push('/settings')"><fa class="fas" :icon="['fa', 'cog']"/></button>
         <button class="settingsBtn navToggleBtn" v-on:click="$store.commit('toggleNav')"><fa class="fas" :icon="['fa', 'bars']"/></button>
       </div>
@@ -24,6 +26,15 @@ export default {
       return this.$store.state.siteFunction.navStatus
     }
   },
+  methods: {
+    toggleDarkMode() {
+      if(this.$colorMode.value === 'light') {
+        this.$colorMode.value = 'dark'
+      } else if(this.$colorMode.value === 'dark') {
+        this.$colorMode.value = 'light'
+      }
+    }
+  }
 }
 </script>
 
@@ -81,6 +92,35 @@ export default {
 }
 .navToggleBtn {
   display: none;
+}
+
+.darkModeBtn {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: #121416;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.darkModeBtn:hover {
+  background-color: #1B1E21;
+}
+.darkModeBtn .fas {
+  color: #FFF;
+  font-size: 16px;
+}
+.dark-mode .darkModeBtn {
+  background-color: #FFF;
+}
+.dark-mode .darkModeBtn:hover {
+  background-color: #EBE4E4;
+}
+.dark-mode .darkModeBtn .fas {
+  color: #FF8317;
 }
 
 

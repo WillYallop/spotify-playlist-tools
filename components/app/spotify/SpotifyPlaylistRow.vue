@@ -46,7 +46,7 @@ export default {
     transition: 0.2s;
 }
 .spotPlaylistRow:hover {
-    background-color: #F9F9F9;
+    background-color: var(--background-2-hover);
 }
 .spotPlaylistRow:last-child  {
     margin-bottom: 0;
