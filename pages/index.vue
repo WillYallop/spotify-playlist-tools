@@ -32,10 +32,12 @@
         <CompSectTitle
         :title="'Want to tell us something?'"
         :body="'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis aliquam neque. Pellentesque tellus justo, laoreet vestibulum neque quis, dignissim interdum nunc.'"/>
-
+        <ContactForm/>
       </div>
 
     </div>
+
+    <FrontendFooter/>
   </div>
 </template>
 
@@ -45,6 +47,8 @@ import CompSectTitle from '@/components/frontend/index/CompSectTitle'
 import Features from '@/components/frontend/index/Features'
 import PricingTables from '@/components/frontend/index/PricingTables'
 import Testimonials from '@/components/global/frontend/Testimonials'
+import ContactForm from '@/components/frontend/index/ContactForm'
+import FrontendFooter from '@/components/global/frontend/FrontendFooter'
 
 export default {
   middleware: 'guest-only',
@@ -58,7 +62,9 @@ export default {
     CompSectTitle,
     Features,
     PricingTables,
-    Testimonials
+    Testimonials,
+    ContactForm,
+    FrontendFooter
   }
 }
 </script>
@@ -71,11 +77,6 @@ export default {
   padding: 0 20px;
 }
 .compSectCon {
-  padding: 150px 0;
-}
-
-/* Media Queries */
-@media only screen and (max-width: 1024px) {
-  .compSectCon {padding: 150px 0 0;}
+  padding:  150px 0 0;
 }
 </style>

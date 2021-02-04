@@ -49,8 +49,8 @@ button {font-family: 'Montserrat', sans-serif !important;}
 button:focus {outline: none;}
 input:focus {outline: none; border: 1px solid var(--accent-1);}
 input {font-family: 'Montserrat', sans-serif !important;} 
-textarea:focus {outline: none;}
-select:focus {outline: none;}
+textarea:focus {outline: none;border: 1px solid var(--accent-1);}
+select:focus {outline: none; border: 1px solid var(--accent-1);}
 select {-webkit-appearance: none;}
 ::selection {background-color: #3C50E0; color: #FFF;}
 
@@ -111,12 +111,24 @@ select {-webkit-appearance: none;}
 .inputStyle::placeholder {
   color: var(--body-text);
 }
+.textareaStyle {
+  width: 100%;
+  height: 100px;
+  background-color: #FDFDFD;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 14px;
+  color: var(--body-text);
+  border: 1px solid var(--background-1);
+  -webkit-appearance: none;
+  resize: none;
+}
 .errorMsg {
   color: var(--error-text);
   font-size: 14px;
   margin-top: 5px;
 }
-
 .boldify {
   font-weight: bold;
   color: var(--title-text);

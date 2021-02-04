@@ -17,7 +17,7 @@ export default {
 <style scoped>
 .compSectTitleCon {
     width: 100%;
-    max-width: 550px;
+    max-width: 600px;
     text-align: center;
     margin: 0 auto 70px;
 } 
