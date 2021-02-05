@@ -6,7 +6,24 @@
             <div class="bannerTextarea">
                 <h1 class="bannerTitleP">{{title}}</h1>
                 <p class="bannerBodyP">{{body}}</p>
-                <button class="spotifySignIn"><fa class="fas" :icon="['fab', 'spotify']"/>Log In With Spotify</button>
+                <!-- Spotify Not Signed In -->
+                <button v-if="!spotifyFrontendData.signedIn" class="spotifySignIn" v-on:click="signInWithSpotify"><fa class="fas" :icon="['fab', 'spotify']"/>Log In With Spotify</button>
+                <!-- Has Spotify Account Signed In -->
+                <div v-if="spotifyFrontendData.signedIn && spotifyFrontendData.userData" class="spotifyUserPreviewCon">
+                    <img :src="spotifyFrontendData.userData.images[0].url" class="spotifyUserImg">
+                    <div class="spotifyUserTextarea">
+                        <p class="spotifyUserP">{{spotifyFrontendData.userData.display_name}}</p>
+                        <div class="spotifyAltInfoCon">
+                            <p class="spotifyAltInfoP"><span class="boldify">{{spotifyFrontendData.userData.followers.total}}</span> Followers</p>
+                            <p class="spotifyAltInfoP"><span class="boldify">{{spotifyFrontendData.playlistTotal}}</span> Playlists</p>
+                        </div>
+                    </div>
+
+                    <div class="spotifySignOutOverlay" v-on:click="signOutOfSpotify">
+                        <p class="signOutP"><fa class="fas" :icon="['fab', 'spotify']"/> Sign Out</p>
+                    </div>
+                </div>
+
             </div>
             <!-- Image -->
             <div class="bannerImgCon">
@@ -21,7 +38,24 @@
 export default {
     props: {
         title: String,
-        body: String
+        body: String,
+        redirectRoute: String
+    },
+    computed: {
+        spotifyFrontendData() {
+            return this.$store.state.spotifyFrontend
+        }
+    },
+    methods: {
+        signInWithSpotify() {
+            if(this.redirectRoute === 'remove-duplicates') {
+                var redirectUrl = process.env.SPOTIFY_REMOVE_DUPLICATES_REDIRECT_URL
+            }
+            window.location.replace("https://accounts.spotify.com/authorize?client_id="+process.env.SPOTIFY_CLIENT_ID+"&response_type=code&redirect_uri="+redirectUrl+"&scope=user-read-private%20user-read-email%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09");
+        },
+        signOutOfSpotify() {
+            this.$store.commit('wipeFrontendSpotifyData')
+        }
     }
 }
 </script>
@@ -80,6 +114,66 @@ export default {
     width: 100%;
 }
 
+/* Spotify User Info */
+.spotifyUserPreviewCon {
+    background-color: #FFF;
+    border-radius: 60px 20px 20px 60px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    max-width: 340px;
+}
+.spotifyUserImg {
+    height: 80px;
+    width: 80px;
+    min-width: 60px;
+    border-radius: 50%;
+}
+.spotifyUserTextarea {
+    padding: 10px;
+}
+.spotifyUserP {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+.spotifyAltInfoCon {
+    display: flex;
+}
+.spotifyAltInfoP {
+    color: #403F3F;
+}
+.spotifyAltInfoP:first-child {
+    margin-right: 10px;
+}
+
+
+.spotifySignOutOverlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    opacity: 0;
+    background-color: var(--accent-2);
+    transition: 0.2s;
+    border-radius: 60px 20px 20px 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.spotifyUserPreviewCon:hover .spotifySignOutOverlay {
+    opacity: 1;
+}
+.signOutP {
+    color: #FFF;
+    font-size: 16px;
+    font-weight: bold;
+}
+.signOutP .fas {
+    margin-right: 5px;
+    font-size: 18px;
+}
 /* Media Queries */
 @media only screen and (max-width: 1024px) {
     .bannerImgCon {display: none;}

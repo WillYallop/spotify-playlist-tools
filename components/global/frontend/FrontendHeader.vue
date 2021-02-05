@@ -94,9 +94,9 @@ export default {
   margin-right: 20px;
   font-size: 14px;
   font-weight: bold;
-  color: var(--title-text);
+  color: #393C41;
   text-decoration: none;
-} 
+}
 
 .signInLink {
   padding: 8px 30px;

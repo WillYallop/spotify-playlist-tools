@@ -2,17 +2,25 @@
     <div>
         <SecondaryBanner
         :title="'Remove Duplicate Playlist Tracks'"
-        :body="'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis aliquam neque. Pellentesque tellus justo, laoreet vestibulum neque quis, dignissim.'"/>
+        :body="'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis aliquam neque. Pellentesque tellus justo, laoreet vestibulum neque quis, dignissim.'"
+        :redirectRoute="'remove-duplicates'"/>
         <InfoRow/>
 
         <div class="pageWrapper">
             
             <!-- No Spotify Account -->
-            <div class="signIntoSpotifyCon">
+            <div v-if="!spotifyFrontendData.signedIn" class="signIntoSpotifyCon" v-on:click="signInWithSpotify">
                 <fa class="fas" :icon="['fab', 'spotify']"/>
                 <p class="addAccount">Log In With Spotify</p>
             </div>
 
+            <!-- Spotify Account Linked -->
+            <div v-else class="pageContentCon">
+                <!-- No Duplicates -->
+
+                {{spotifyFrontendData}}
+                <!-- No Duplicates -->
+            </div>
 
         </div>
         <FrontendFooter/>
@@ -36,6 +44,17 @@ export default {
         SecondaryBanner,
         InfoRow,
         FrontendFooter
+    },
+    computed: {
+        spotifyFrontendData() {
+            return this.$store.state.spotifyFrontend
+        }
+    },
+    methods: {
+        signInWithSpotify() {
+            window.location.replace("https://accounts.spotify.com/authorize?client_id="+process.env.SPOTIFY_CLIENT_ID+"&response_type=code&redirect_uri="+process.env.SPOTIFY_REMOVE_DUPLICATES_REDIRECT_URL+"&scope=user-read-private%20user-read-email%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09")
+        },
+
     }
 }
 </script>
@@ -60,6 +79,7 @@ export default {
     text-align: center;
     transition: 0.2s;
     cursor: pointer;
+    box-shadow: 0px 11px 29px rgba(0, 0, 0, 0.03);
 }
 .signIntoSpotifyCon:hover {
     background-color: var(--accent-2-hover);

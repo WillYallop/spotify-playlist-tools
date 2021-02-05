@@ -7,6 +7,7 @@
 <script>
 export default {
     layout: 'blank',
+    colorMode: 'light',
     middleware: 'guest-only',
     data() {
         return {
@@ -18,7 +19,8 @@ export default {
             code: this.$router.currentRoute.query.code,
             state: this.$router.currentRoute.query.state
         })
-        this.$store.dispatch('getFrontendNewSpotifyTokens')
+        this.$store.dispatch('getFrontendNewSpotifyTokens', this.$router.currentRoute.query.redirect)
+        this.$router.push('/spotify/'+this.$router.currentRoute.query.redirect)
     }
 }
 </script>
