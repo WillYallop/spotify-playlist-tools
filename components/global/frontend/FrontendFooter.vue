@@ -13,7 +13,7 @@
                     <p class="linkColHeaderP">Pages</p>
                     <nuxt-link to="/">Home</nuxt-link>
                     <nuxt-link to="/">Shuffle Playlist</nuxt-link>
-                    <nuxt-link to="/">Remove Duplicates</nuxt-link>
+                    <nuxt-link to="/spotify/remove-duplicates">Remove Duplicates</nuxt-link>
                 </div>
                 <div class="linkCol">
                     <p class="linkColHeaderP">Useful Links</p>

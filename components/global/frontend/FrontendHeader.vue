@@ -8,7 +8,7 @@
         <nav class="desktopNav">
           <nuxt-link class="headerLink" to="/playlist/shuffle">Shuffle Playlist</nuxt-link>
           <nuxt-link class="headerLink" to="/playlist/generate">Generate Playlist</nuxt-link>
-          <nuxt-link class="headerLink" to="/playlist/duplicates">Remove Duplicates</nuxt-link>
+          <nuxt-link class="headerLink" to="/spotify/remove-duplicates">Remove Duplicates</nuxt-link>
 
           <nuxt-link to="/sign-in" class="signInLink">Sign In</nuxt-link>
           <nuxt-link to="/sign-up" class="signUpLink">Sign Up</nuxt-link>

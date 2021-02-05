@@ -9,9 +9,9 @@
                         <!-- Navigation -->
                         <nav class="navLinksCon">
                             <nuxt-link @click.native="$store.commit('toggleFrontendNav')" class="navLink" to="/"><div class="iconCon"><fa class="fas" :icon="['fa', 'tachometer-alt']"/></div>Home</nuxt-link>
-                            <nuxt-link @click.native="$store.commit('toggleFrontendNav')" class="navLink" to="/playlist/shuffle"><div class="iconCon"><fa class="fas" :icon="['fa', 'random']"/></div>Shuffle Playlist</nuxt-link>
-                            <nuxt-link @click.native="$store.commit('toggleFrontendNav')" class="navLink" to="/playlist/generate"><div class="iconCon"><fa class="fas" :icon="['fa', 'redo']"/></div>Generate Playlists</nuxt-link>
-                            <nuxt-link @click.native="$store.commit('toggleFrontendNav')" class="navLink" to="/playlist/duplicates"><div class="iconCon"><fa class="fas" :icon="['fa', 'clone']"/></div>Remove Duplicates</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleFrontendNav')" class="navLink" to="/spotify/shuffle"><div class="iconCon"><fa class="fas" :icon="['fa', 'random']"/></div>Shuffle Playlist</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleFrontendNav')" class="navLink" to="/spotify/generate"><div class="iconCon"><fa class="fas" :icon="['fa', 'redo']"/></div>Generate Playlists</nuxt-link>
+                            <nuxt-link @click.native="$store.commit('toggleFrontendNav')" class="navLink" to="/spotify/remove-duplicates"><div class="iconCon"><fa class="fas" :icon="['fa', 'clone']"/></div>Remove Duplicates</nuxt-link>
                         </nav>
                     </div>
     
