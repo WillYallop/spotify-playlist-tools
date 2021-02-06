@@ -178,7 +178,7 @@ const actions = {
                 Authorization: 'Bearer ' + rootState.accounts.selectedAccount.accessToken
             }
         }
-        axios.get(nextUrl, config)
+        axios.get(data.nextUrl, config)
         .then((response) => {
             // Loop over response playlists 
             for(var i = 0; i < response.data.items.length; i++) {
@@ -214,7 +214,6 @@ const actions = {
                         accountId: rootState.accounts.selectedAccount.accountId
                     })
                     .then((response) => {
-                        this.loadMorePlaylists(nextUrl)
                         dispatch('loadMorePlaylists', { refresh: false, user: data.user, nextUrl: data.nextUrl })
                     })
                     .catch((error) => {

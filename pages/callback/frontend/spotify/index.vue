@@ -20,11 +20,11 @@ export default {
         }
     },
     mounted() {
-        this.$store.commit('setFrontendSpotifyCallbackData', { 
+        this.$store.commit('fe_setSpotifyCallbackData', { 
             code: this.$router.currentRoute.query.code,
             state: this.$router.currentRoute.query.state
         })
-        this.$store.dispatch('getFrontendNewSpotifyTokens')
+        this.$store.dispatch('fe_getNewSpotifyTokens')
         this.$router.push(this.spotifyFrontendData.redirectUrl)
     }
 }

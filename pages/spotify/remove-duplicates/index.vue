@@ -17,17 +17,18 @@
             <!-- Spotify Account Linked -->
             <div v-else>
                 <!-- No Duplicates -->
-                <div v-if="playlistsWithDuplicates" class="pageContentCon">
+                <div v-if="playlistsWithDuplicates.length === 0" class="pageContentCon">
                     <div class="noDuplicatesCon">
                         <img src="../../../assets/images/frontend/frontendSuccessImg.svg" alt="No duplicate trakcs in your playlists" class="noDuplicatesImg">
                         <p class="noDuplicatesTitleP">Well Done Melody Melon!</p>
                         <p class="noDuplicatesBodyP">None of your <span class="boldify">{{spotifyFrontendData.playlistTotal}}</span> playlists contain duplicate tracks! You're a playlist master!</p>
-                        <button class="reCheckDuplicatesBtn">Re-Check Playlists</button>
+                        <button class="reCheckDuplicatesBtn" v-on:click="testMethod">Re-Check Playlists</button>
                     </div>
                 </div>
                 <!-- Duplicates -->
                 <div v-else class="pageContentCon">
-                    <RemoveDuplicates/>
+                    <RemoveDuplicates
+                    :playlists="playlistsWithDuplicates"/>
                 </div>
             </div>
 
@@ -75,10 +76,12 @@ export default {
     },
     methods: {
         signInWithSpotify() {
-            this.$store.commit('setFrontendSpotifyAuthRedirectUrl', '/spotify/remove-duplicates')
-            window.location.replace("https://accounts.spotify.com/authorize?client_id="+process.env.SPOTIFY_CLIENT_ID+"&response_type=code&redirect_uri="+process.env.SPOTIFY_FRONTEND_REDIRECT_URL+"&scope=user-read-private%20user-read-email%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09")
+            this.$store.commit('fe_setSpotifyAuthRedirectUrl', '/spotify/remove-duplicates')
+            window.location.replace("https://accounts.spotify.com/authorize?client_id="+process.env.SPOTIFY_CLIENT_ID+"&response_type=code&redirect_uri="+process.env.SPOTIFY_FRONTEND_REDIRECT_URL+"&scope=user-read-private%20user-read-email%20playlist-modify-public%20playlist-modify-private%20playlist-read-private%20playlist-read-collaborative&state=34fFs29kd09")
         },
-
+        testMethod() {
+            console.log(this.spotifyFrontendData.playlists)
+        }
     }
 }
 </script>
