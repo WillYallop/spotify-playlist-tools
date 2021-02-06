@@ -3,7 +3,7 @@
         <SecondaryBanner
         :title="'Remove Duplicate Playlist Tracks'"
         :body="'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis aliquam neque. Pellentesque tellus justo, laoreet vestibulum neque quis, dignissim.'"
-        :redirectRoute="'remove-duplicates'"/>
+        :redirectRoute="'/spotify/remove-duplicates'"/>
         <InfoRow/>
 
         <div class="pageWrapper">
@@ -52,7 +52,8 @@ export default {
     },
     methods: {
         signInWithSpotify() {
-            window.location.replace("https://accounts.spotify.com/authorize?client_id="+process.env.SPOTIFY_CLIENT_ID+"&response_type=code&redirect_uri="+process.env.SPOTIFY_REMOVE_DUPLICATES_REDIRECT_URL+"&scope=user-read-private%20user-read-email%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09")
+            this.$store.commit('setFrontendSpotifyAuthRedirectUrl', '/spotify/remove-duplicates')
+            window.location.replace("https://accounts.spotify.com/authorize?client_id="+process.env.SPOTIFY_CLIENT_ID+"&response_type=code&redirect_uri="+process.env.SPOTIFY_FRONTEND_REDIRECT_URL+"&scope=user-read-private%20user-read-email%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09")
         },
 
     }

@@ -48,10 +48,8 @@ export default {
     },
     methods: {
         signInWithSpotify() {
-            if(this.redirectRoute === 'remove-duplicates') {
-                var redirectUrl = process.env.SPOTIFY_REMOVE_DUPLICATES_REDIRECT_URL
-            }
-            window.location.replace("https://accounts.spotify.com/authorize?client_id="+process.env.SPOTIFY_CLIENT_ID+"&response_type=code&redirect_uri="+redirectUrl+"&scope=user-read-private%20user-read-email%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09");
+            this.$store.commit('setFrontendSpotifyAuthRedirectUrl', this.redirectRoute)
+            window.location.replace("https://accounts.spotify.com/authorize?client_id="+process.env.SPOTIFY_CLIENT_ID+"&response_type=code&redirect_uri="+process.env.SPOTIFY_FRONTEND_REDIRECT_UR+"&scope=user-read-private%20user-read-email%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09");
         },
         signOutOfSpotify() {
             this.$store.commit('wipeFrontendSpotifyData')

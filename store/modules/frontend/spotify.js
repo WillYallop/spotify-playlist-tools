@@ -8,6 +8,7 @@ const state = () => ({
     tokenType: false,
     accessToken: false,
     refreshToken: false,
+    redirectUrl: false,
 
     playlistTotal: 0,
     userData: false,
@@ -43,6 +44,9 @@ const mutations = {
         state.playlistTotal = 0
         state.userData = false
         state.playlists = []
+    },
+    setFrontendSpotifyAuthRedirectUrl(state, data) {
+        state.redirectUrl = data
     }
 
 }
