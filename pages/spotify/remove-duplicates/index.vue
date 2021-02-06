@@ -15,11 +15,20 @@
             </div>
 
             <!-- Spotify Account Linked -->
-            <div v-else class="pageContentCon">
+            <div v-else>
                 <!-- No Duplicates -->
-
-                {{spotifyFrontendData}}
-                <!-- No Duplicates -->
+                <div v-if="playlistsWithDuplicates" class="pageContentCon">
+                    <div class="noDuplicatesCon">
+                        <img src="../../../assets/images/frontend/frontendSuccessImg.svg" alt="No duplicate trakcs in your playlists" class="noDuplicatesImg">
+                        <p class="noDuplicatesTitleP">Well Done Melody Melon!</p>
+                        <p class="noDuplicatesBodyP">None of your <span class="boldify">{{spotifyFrontendData.playlistTotal}}</span> playlists contain duplicate tracks! You're a playlist master!</p>
+                        <button class="reCheckDuplicatesBtn">Re-Check Playlists</button>
+                    </div>
+                </div>
+                <!-- Duplicates -->
+                <div v-else class="pageContentCon">
+                    <RemoveDuplicates/>
+                </div>
             </div>
 
         </div>
@@ -31,6 +40,7 @@
 import SecondaryBanner from '@/components/global/frontend/SecondaryBanner'
 import InfoRow from '@/components/frontend/removeDuplicates/InfoRow'
 import FrontendFooter from '@/components/global/frontend/FrontendFooter'
+import RemoveDuplicates from '@/components/frontend/removeDuplicates/RemoveDuplicates'
 
 export default {
     colorMode: 'light',
@@ -43,11 +53,24 @@ export default {
     components: {
         SecondaryBanner,
         InfoRow,
-        FrontendFooter
+        FrontendFooter,
+        RemoveDuplicates
+
     },
     computed: {
         spotifyFrontendData() {
             return this.$store.state.spotifyFrontend
+        },
+        playlistsWithDuplicates() {
+            if(this.spotifyFrontendData.signedIn) {
+                let array = []
+                for(var i = 0; i < this.spotifyFrontendData.playlists.length; i++) {
+                    if(this.spotifyFrontendData.playlists[i].hasDuplicates) {
+                        array.push(this.spotifyFrontendData.playlists[i])
+                    }
+                }
+                return array
+            }
         }
     },
     methods: {
@@ -94,5 +117,49 @@ export default {
     margin-top: 10px;
     font-size: 14px;
     font-weight: bold;
+}
+
+/* Page Content */
+.pageContentCon {
+    margin-top: -20px;
+    width: 100%;
+    border-radius: 10px;
+    background: #FFF;
+    box-shadow: 0px 11px 29px rgba(0, 0, 0, 0.03);
+}
+/* No Duplicates */
+.noDuplicatesCon {
+    width: 100%;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+} 
+.noDuplicatesImg {
+    width: 80%;
+    max-width: 250px;
+} 
+.noDuplicatesTitleP {
+    font-weight: bold;
+    margin: 20px 0 5px;
+} 
+.noDuplicatesBodyP {
+    max-width: 350px;
+}
+.reCheckDuplicatesBtn {
+    background-color: var(--accent-2);
+    padding: 10px 40px;
+    border-radius: 10px;
+    border: none;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.reCheckDuplicatesBtn:hover {
+    background-color: var(--accent-2-hover);
 }
 </style>

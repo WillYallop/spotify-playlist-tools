@@ -14,13 +14,18 @@ export default {
 
         }
     },
+    computed: {
+        spotifyFrontendData() {
+            return this.$store.state.spotifyFrontend
+        }
+    },
     mounted() {
         this.$store.commit('setFrontendSpotifyCallbackData', { 
             code: this.$router.currentRoute.query.code,
             state: this.$router.currentRoute.query.state
         })
-        this.$store.dispatch('getFrontendNewSpotifyTokens', this.$router.currentRoute.query.redirect)
-        this.$router.push('/spotify/'+this.$router.currentRoute.query.redirect)
+        this.$store.dispatch('getFrontendNewSpotifyTokens')
+        this.$router.push(this.spotifyFrontendData.redirectUrl)
     }
 }
 </script>

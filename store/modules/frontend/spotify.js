@@ -53,10 +53,6 @@ const mutations = {
 
 const actions = {
     getFrontendNewSpotifyTokens({ commit, dispatch, state }, data) {
-        // set redirect uri
-        if(data === 'remove-duplicates') {
-            var redirectUri = process.env.SPOTIFY_REMOVE_DUPLICATES_REDIRECT_URL
-        }
         // Header
         let config = {
             headers: {
@@ -67,7 +63,7 @@ const actions = {
         axios.post('https://accounts.spotify.com/api/token', qs.stringify({
             grant_type: 'authorization_code',
             code: state.code,
-            redirect_uri: redirectUri
+            redirect_uri: process.env.SPOTIFY_FRONTEND_REDIRECT_URL
         }), config)
         .then((results) => {
             if(results.status === 200) {

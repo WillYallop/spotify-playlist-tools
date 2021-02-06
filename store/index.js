@@ -1,14 +1,14 @@
 import createPersistedState from "vuex-persistedstate";
 
 // Modules
-import siteFunction from './modules/site-function.js';
-import actionHandler from './modules/action-handler.js';
-import user from './modules/user';
-import spotify from './modules/spotify';
+import siteFunction from './modules/app/site-function.js';
+import actionHandler from './modules/app/action-handler.js';
+import user from './modules/app/user';
+import spotify from './modules/app/spotify';
 import spotifyFrontend from './modules/frontend/spotify'
-import accounts from './modules/accounts';
-import spotifyPlaylists from './modules/spotify-playlists';
-import spotifyTracks from './modules/spotify-tracks';
+import accounts from './modules/app/accounts';
+import spotifyPlaylists from './modules/app/spotify-playlists';
+import spotifyTracks from './modules/app/spotify-tracks';
 
 const state = () => ({
   
