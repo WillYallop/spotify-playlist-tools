@@ -11,7 +11,7 @@
                         <p class="bodyP">This playlist has {{playlist.duplicateTracks.length}} duplicate tracks</p>
                     </div>
                 </div>
-                <button class="removeDuplicatesBtn">Remove Duplicates</button>
+                <button class="removeDuplicatesBtn" v-on:click="removeDuplicateTracks(playlist)">Remove Duplicates</button>
             </div>
             <!-- Playlist Body --> 
             <div class="playlistBodyCon">
@@ -40,6 +40,31 @@ export default {
             return this.$store.state.spotifyFrontend
         },
     },
+    methods: {
+        removeDuplicateTracks(playlist) {
+            this.$store.dispatch('fe_removeTracksFromSpotifyPlaylist', {
+                playlistId: playlist.playlistId,
+                tracks: playlist.duplicateTracks,
+                refresh: true
+            })
+            .then((snapshot) => {
+                if(snapshot) {
+                    this.$store.dispatch('fe_updatePlaylistsSnapshot', {
+                        accountId: this.spotifyFrontendData.userData.id,
+                        playlistId: playlist.playlistId,
+                        snapshot: snapshot,
+                        hasDuplicates: false,
+                        duplicateTracks: [],
+                        beenChecked: true
+                    })
+                    this.$store.commit('fe_removeSpecificPlaylist', playlist.playlistId)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
+    }
 }
 </script>
 

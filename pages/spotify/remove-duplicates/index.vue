@@ -17,9 +17,9 @@
             <!-- Spotify Account Linked -->
             <div v-else>
                 <!-- Data Loading -->
-                <div v-if="spotifyFrontendData.loading" class="playlistDataLoadingCon">
+                <div v-if="spotifyDuplicatesData.loading" class="playlistDataLoadingCon">
                    <img class="playlistsLoadingImg" src="../../../assets/images/frontend/loadingIllustration.svg" alt="Playlists Loading">
-                   <p class="playlistLoadingTitleP">Checking Playlist {{totalPlaylistsLoaded + 1}}/{{spotifyFrontendData.playlists.length}} <img src="../../../assets/images/loadingIndicator.gif" class="loadingIndicatorImg"></p>
+                   <p class="playlistLoadingTitleP">Checking Playlist {{totalPlaylistsLoaded + 1}}/{{spotifyDuplicatesData.playlists.length}} <img src="../../../assets/images/loadingIndicator.gif" class="loadingIndicatorImg"></p>
                 </div>
                 <!-- Loaded Data -->
                 <div v-else>
@@ -28,7 +28,7 @@
                         <div class="noDuplicatesCon">
                             <img src="../../../assets/images/frontend/frontendSuccessImg.svg" alt="No duplicate trakcs in your playlists" class="noDuplicatesImg">
                             <p class="noDuplicatesTitleP">Well Done Melody Melon!</p>
-                            <p class="noDuplicatesBodyP">None of your <span class="boldify">{{spotifyFrontendData.playlistTotal}}</span> playlists contain duplicate tracks! You're a playlist master!</p>
+                            <p class="noDuplicatesBodyP">None of your <span class="boldify">{{spotifyDuplicatesData.playlistTotal}}</span> playlists contain duplicate tracks! You're a playlist master!</p>
                             <button class="reCheckDuplicatesBtn">Re-Check Playlists</button>
                         </div>
                     </div>
@@ -70,12 +70,15 @@ export default {
         spotifyFrontendData() {
             return this.$store.state.spotifyFrontend
         },
+        spotifyDuplicatesData() {
+            return this.$store.state.fe_spotifyDuplicates
+        },
         playlistsWithDuplicates() {
             if(this.spotifyFrontendData.signedIn) {
                 let array = []
-                for(var i = 0; i < this.spotifyFrontendData.playlists.length; i++) {
-                    if(this.spotifyFrontendData.playlists[i].hasDuplicates) {
-                        array.push(this.spotifyFrontendData.playlists[i])
+                for(var i = 0; i < this.spotifyDuplicatesData.playlists.length; i++) {
+                    if(this.spotifyDuplicatesData.playlists[i].hasDuplicates) {
+                        array.push(this.spotifyDuplicatesData.playlists[i])
                     }
                 }
                 return array
@@ -84,13 +87,18 @@ export default {
         totalPlaylistsLoaded() {
             if(this.spotifyFrontendData.signedIn) {
                 let count = 0;
-                for(var i = 0; i < this.spotifyFrontendData.playlists.length; i++) {
-                    if(this.spotifyFrontendData.playlists[i].finishedLoading) {
+                for(var i = 0; i < this.spotifyDuplicatesData.playlists.length; i++) {
+                    if(this.spotifyDuplicatesData.playlists[i].finishedLoading) {
                         count++
                     }
                 }
                 return count
             }
+        }
+    },
+    mounted() {
+        if(this.spotifyFrontendData.signedIn) {
+            this.$store.dispatch('fe_downloadSpotifyPlaylists')
         }
     },
     methods: {
