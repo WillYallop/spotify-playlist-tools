@@ -7,19 +7,6 @@ const state = () => ({
 })
   
 const mutations = {
-    fe_setSpotifyCallbackData(state, data) {
-        state.state = data.state
-        state.code = data.code
-    },
-    fe_setSpotifyTokens(state, data) {
-        state.tokenType = data.tokenType
-        state.accessToken = data.accessToken
-        state.refreshToken = data.refreshToken
-        state.signedIn = data.signedIn
-    },
-    fe_setNewSpotifyAccessToken(state, accessToken) {
-        state.accessToken = accessToken
-    },
     fe_pushPlaylist(state, data) {
         state.playlists.push(data)
     },
@@ -69,9 +56,6 @@ const mutations = {
     fe_resetSpotifyPlaylistTracks(state, index) {
         state.playlists[index].tracks = []
     },
-    fe_resetSpotifyPlaylists(state) {
-        state.playlists = []
-    },
     fe_setSpotifyPlaylists(state, data) {
         state.playlists = data
     },
@@ -91,7 +75,7 @@ const mutations = {
 const actions = {
     // Download Spotify Playlists
     fe_downloadSpotifyPlaylists({ commit, dispatch, rootState }, data) {
-        commit('fe_resetSpotifyPlaylists') // reset playlist data
+        commit('fe_wipeSpotifyDuplicatePlaylistData') // reset playlist data
         commit('fe_toggleSpotifyLoadingController', true)
         // Header
         let config = {

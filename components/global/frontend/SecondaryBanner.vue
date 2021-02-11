@@ -15,7 +15,7 @@
                         <p class="spotifyUserP">{{spotifyFrontendData.userData.display_name}}</p>
                         <div class="spotifyAltInfoCon">
                             <p class="spotifyAltInfoP"><span class="boldify">{{spotifyFrontendData.userData.followers.total}}</span> Followers</p>
-                            <p class="spotifyAltInfoP"><span class="boldify">{{spotifyFrontendData.playlistTotal}}</span> Playlists</p>
+                            <p class="spotifyAltInfoP"><span class="boldify">{{spotifyDuplicatesData.playlistTotal}}</span> Playlists</p>
                         </div>
                     </div>
 
@@ -44,6 +44,9 @@ export default {
     computed: {
         spotifyFrontendData() {
             return this.$store.state.spotifyFrontend
+        },
+        spotifyDuplicatesData() {
+            return this.$store.state.fe_spotifyDuplicates
         }
     },
     methods: {
@@ -53,6 +56,7 @@ export default {
         },
         signOutOfSpotify() {
             this.$store.commit('fe_wipeSpotifyData')
+            this.$store.commit('fe_wipeSpotifyDuplicatePlaylistData')
         }
     }
 }
@@ -70,6 +74,9 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    
+    overflow: hidden;
 }
 
 /* Textarea */
@@ -124,7 +131,7 @@ export default {
 .spotifyUserImg {
     height: 80px;
     width: 80px;
-    min-width: 60px;
+    min-width: 80px;
     border-radius: 50%;
 }
 .spotifyUserTextarea {
@@ -136,6 +143,7 @@ export default {
 }
 .spotifyAltInfoCon {
     display: flex;
+    flex-wrap: wrap;
 }
 .spotifyAltInfoP {
     color: #403F3F;
@@ -174,6 +182,12 @@ export default {
 }
 /* Media Queries */
 @media only screen and (max-width: 1024px) {
-    .bannerImgCon {display: none;}
+    .bannerImgCon {position: absolute; top: 0; bottom: 0; right: 0; width: 20%; padding-bottom: 20px;}
+    .bannerImg {height: 100%; width: auto; object-fit: cover;}
+    .bannerTextarea {width: 80%;}
+}
+@media only screen and (max-width: 900px) {
+    .bannerCon {padding-bottom: 20px;}
+    .bannerImgCon {padding-bottom: 20px;}
 }
 </style>

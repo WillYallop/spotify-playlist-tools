@@ -161,9 +161,13 @@ export default {
   background-color: var(--background-1-hover);
 }
 
+
 /* Media Queries */
 @media only screen and (max-width: 1024px) {
   .desktopNav {display: none;}
   .mobileBtns {display: flex;}
+
+  .navigationBtn {background-color: #FFF; filter: drop-shadow(0px 0px 6px rgba(0, 0, 0, 0.03));}
+  .scrolled .navigationBtn {background-color: var(--background-1); filter: none;}
 }
 </style>

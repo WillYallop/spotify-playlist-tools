@@ -85,6 +85,11 @@ const actions = {
             commit('fe_setSpotifyAccountData', {
                 accountData: results.data,
             })
+            if(state.redirectUrl === '/spotify/remove-duplicates') {
+                dispatch('fe_downloadSpotifyPlaylists', {
+                    refresh: true
+                })
+            }
         })
         .catch((err) => {
             console.log(err)

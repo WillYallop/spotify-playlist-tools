@@ -98,7 +98,9 @@ export default {
     },
     mounted() {
         if(this.spotifyFrontendData.signedIn) {
-            this.$store.dispatch('fe_downloadSpotifyPlaylists')
+            this.$store.dispatch('fe_downloadSpotifyPlaylists', {
+                refresh: true
+            })
         }
     },
     methods: {

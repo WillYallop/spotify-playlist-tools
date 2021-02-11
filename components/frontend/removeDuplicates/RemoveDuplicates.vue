@@ -8,7 +8,7 @@
                     <img :src="playlist.image" class="playlistImg">
                     <div class="playlistHeaderTextarea">
                         <p class="titleP">{{playlist.name}}</p>
-                        <p class="bodyP">This playlist has {{playlist.duplicateTracks.length}} duplicate tracks</p>
+                        <p class="bodyP">This playlist has <span class="boldify">{{playlist.duplicateTracks.length}}</span> duplicate!</p>
                     </div>
                 </div>
                 <button class="removeDuplicatesBtn" v-on:click="removeDuplicateTracks(playlist)">Remove Duplicates</button>
@@ -88,10 +88,12 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    max-width: 100%;
 } 
 .playlistHeaderLeftCon {
     display: flex;
     align-items: center;
+    width: calc(100% - 180px);
 } 
 .playlistImg {
     height: 40px;
@@ -101,15 +103,22 @@ export default {
 } 
 .playlistHeaderTextarea {
     padding: 0 10px;
+    width: calc(100% - 40px);
 } 
 .titleP {
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 2px;
 } 
+.playlistHeaderTextarea .titleP {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .bodyP {
     font-size: 14px;
 } 
+
 .removeDuplicatesBtn {
     background-color: var(--error-text);
     padding: 10px 20px;
@@ -135,6 +144,11 @@ export default {
     display: flex;
     align-items: center;
 } 
+.duplicateTrackRow .bodyP {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .duplicateIcon {
     background-color: var(--accent-1);
     padding: 5px;
@@ -150,7 +164,9 @@ export default {
 
 /* Queries */
 @media only screen and (max-width: 750px) {
+    .playlistHeaderLeftCon {width: 100%;}
     .playlistHeader {flex-wrap: wrap;}
     .removeDuplicatesBtn {width: 100%; margin-top: 10px;}
+    .playlistHeaderTextarea {padding: 0 0 0 10px;}
 }
 </style>
