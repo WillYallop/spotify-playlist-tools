@@ -16,19 +16,27 @@
 
             <!-- Spotify Account Linked -->
             <div v-else>
-                <!-- No Duplicates -->
-                <div v-if="playlistsWithDuplicates.length === 0" class="pageContentCon">
-                    <div class="noDuplicatesCon">
-                        <img src="../../../assets/images/frontend/frontendSuccessImg.svg" alt="No duplicate trakcs in your playlists" class="noDuplicatesImg">
-                        <p class="noDuplicatesTitleP">Well Done Melody Melon!</p>
-                        <p class="noDuplicatesBodyP">None of your <span class="boldify">{{spotifyFrontendData.playlistTotal}}</span> playlists contain duplicate tracks! You're a playlist master!</p>
-                        <button class="reCheckDuplicatesBtn" v-on:click="testMethod">Re-Check Playlists</button>
-                    </div>
+                <!-- Data Loading -->
+                <div v-if="spotifyFrontendData.loading" class="playlistDataLoadingCon">
+                   <img class="playlistsLoadingImg" src="../../../assets/images/frontend/loadingIllustration.svg" alt="Playlists Loading">
+                   <p class="playlistLoadingTitleP">Checking Playlist {{totalPlaylistsLoaded + 1}}/{{spotifyFrontendData.playlists.length}} <img src="../../../assets/images/loadingIndicator.gif" class="loadingIndicatorImg"></p>
                 </div>
-                <!-- Duplicates -->
-                <div v-else class="pageContentCon">
-                    <RemoveDuplicates
-                    :playlists="playlistsWithDuplicates"/>
+                <!-- Loaded Data -->
+                <div v-else>
+                    <!-- No Duplicates -->
+                    <div v-if="playlistsWithDuplicates.length === 0" class="pageContentCon">
+                        <div class="noDuplicatesCon">
+                            <img src="../../../assets/images/frontend/frontendSuccessImg.svg" alt="No duplicate trakcs in your playlists" class="noDuplicatesImg">
+                            <p class="noDuplicatesTitleP">Well Done Melody Melon!</p>
+                            <p class="noDuplicatesBodyP">None of your <span class="boldify">{{spotifyFrontendData.playlistTotal}}</span> playlists contain duplicate tracks! You're a playlist master!</p>
+                            <button class="reCheckDuplicatesBtn">Re-Check Playlists</button>
+                        </div>
+                    </div>
+                    <!-- Duplicates -->
+                    <div v-else class="pageContentCon">
+                        <RemoveDuplicates
+                        :playlists="playlistsWithDuplicates"/>
+                    </div>
                 </div>
             </div>
 
@@ -72,15 +80,23 @@ export default {
                 }
                 return array
             }
+        },
+        totalPlaylistsLoaded() {
+            if(this.spotifyFrontendData.signedIn) {
+                let count = 0;
+                for(var i = 0; i < this.spotifyFrontendData.playlists.length; i++) {
+                    if(this.spotifyFrontendData.playlists[i].finishedLoading) {
+                        count++
+                    }
+                }
+                return count
+            }
         }
     },
     methods: {
         signInWithSpotify() {
             this.$store.commit('fe_setSpotifyAuthRedirectUrl', '/spotify/remove-duplicates')
             window.location.replace("https://accounts.spotify.com/authorize?client_id="+process.env.SPOTIFY_CLIENT_ID+"&response_type=code&redirect_uri="+process.env.SPOTIFY_FRONTEND_REDIRECT_URL+"&scope=user-read-private%20user-read-email%20playlist-modify-public%20playlist-modify-private%20playlist-read-private%20playlist-read-collaborative&state=34fFs29kd09")
-        },
-        testMethod() {
-            console.log(this.spotifyFrontendData.playlists)
         }
     }
 }
@@ -164,5 +180,33 @@ export default {
 }
 .reCheckDuplicatesBtn:hover {
     background-color: var(--accent-2-hover);
+}
+
+/* Loading */
+.playlistDataLoadingCon {
+    margin-top: -20px;
+    width: 100%;
+    border-radius: 10px;
+    background: #FFF;
+    box-shadow: 0px 11px 29px rgba(0, 0, 0, 0.03);
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} 
+.playlistsLoadingImg {
+    width: 80%;
+    max-width: 250px;
+} 
+.playlistLoadingTitleP {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+} 
+.loadingIndicatorImg {
+    height: 16px;
+    margin-left: 10px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="infoRowCon">
+    <div class="infoRowCon" :class="{ 'signedIntoSpotify' : spotifyFrontendData.signedIn }">
         <ul class="infoRowWrapper pageWrapper">
 
             <li class="infoCol" style="padding: 0 20px 0 0;">
@@ -18,6 +18,16 @@
         </ul>
     </div>
 </template>
+
+<script>
+export default {
+    computed: {
+        spotifyFrontendData() {
+            return this.$store.state.spotifyFrontend
+        },
+    }
+}
+</script>
 
 <style scoped>
 .infoRowCon {
@@ -52,6 +62,7 @@
 
 /* Media Queries */
 @media only screen and (max-width: 900px) {
+    .signedIntoSpotify {display: none;}
     .infoRowWrapper {
         flex-wrap: wrap;
         width: 100%;
